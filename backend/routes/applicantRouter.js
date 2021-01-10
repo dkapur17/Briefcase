@@ -24,7 +24,7 @@ router.post('/register', async (req, res) => {
         const salt = await bcrypt.genSalt();
         const passwordHash = await bcrypt.hash(password, salt);
 
-        const newApplicant = Applicant({ firstName, lastName, email, password: passwordHash, });
+        const newApplicant = Applicant({ firstName, lastName, email, password: passwordHash });
         const savedApplicant = await newApplicant.save();
         return res.json(savedApplicant);
     }
@@ -50,7 +50,7 @@ router.post('/login', async (req, res) => {
         if (!isMatch)
             return res.status(400).json({ msg: "Invalid login credentials" });
 
-        const token = jwt.sign({ id: applicant._id }, process.env.JWT_SECRET);
+        const token = jwt.sign({ id: applicant._id, type: applicant.type }, process.env.JWT_SECRET);
 
         return res.json({ token, applicant });
     }
@@ -81,18 +81,18 @@ router.patch('/editProfile', auth, async (req, res) => {
 
 });
 
-router.post('/validateToken', async (req, res) => {
+router.post('/getUserData', async (req, res) => {
     try {
         const token = req.header("auth-token");
         if (!token)
-            return res.json(false);
+            return res.json(null);
         const verified = jwt.verify(token, process.env.JWT_SECRET);
         if (!verified)
-            return res.json(false);
+            return res.json(null);
         const applicant = await Applicant.findById(verified.id);
         if (!applicant)
-            return res.json(false);
-        return res.json(true);
+            return res.json(null);
+        return res.json(applicant);
     }
     catch (err) {
         res.status(500).json({ error: err.message });

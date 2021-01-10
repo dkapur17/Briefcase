@@ -6,8 +6,9 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use("/applicant", require('./routes/applicantRouter'));
-app.use("/recruiter", require('./routes/recruiterRouter'));
+app.use("/api/applicant", require('./routes/applicantRouter'));
+app.use("/api/recruiter", require('./routes/recruiterRouter'));
+app.use("/api/general", require('./routes/generalRouter'));
 
 const port = process.env.PORT || 5000;
 

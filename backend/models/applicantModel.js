@@ -5,12 +5,11 @@ const applicantSchema = new mongoose.Schema({
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, minlen: 5 },
-    role: { type: String, "default": "Applicant" },
+    type: { type: String, "default": "applicant" },
     education: { type: Array, "default": [] },
     skills: { type: Array, "default": [] },
-    rating: { type: Number, "default": 0 },
-    ratingCount: { type: Number, "default": 0 },
-    applications: { type: Array, "default": [] },
+    ratings: { type: Array, "default": [] },
+    applications: { type: Array, "default": [] }
 });
 
 module.exports = Applicant = mongoose.model("applicant", applicantSchema);

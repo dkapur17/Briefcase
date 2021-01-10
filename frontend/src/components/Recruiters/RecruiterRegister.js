@@ -56,7 +56,7 @@ const RecruiterRegister = () => {
                 </div>
                 <div className="col">
                     <label htmlFor="phone">Contact Number</label>
-                    <input type="tel" className="form-control" id="phone" pattern="[0-9]{10}" onInvalid={({ target }) => target.setCustomValidity("Contact Number must be 10 digits long")} value={phone} onChange={({ target }) => setPhone(target.value)} />
+                    <input type="tel" className="form-control" id="phone" pattern="[0-9]{10}" onInput={({ target }) => target.setCustomValidity("")} onInvalid={({ target }) => target.setCustomValidity("Contact Number must be 10 digits long")} value={phone} onChange={({ target }) => setPhone(target.value)} />
                 </div>
             </div>
             <div className="form-group">

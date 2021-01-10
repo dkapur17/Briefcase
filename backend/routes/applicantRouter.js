@@ -69,8 +69,8 @@ router.patch('/editProfile', auth, async (req, res) => {
                 firstName,
                 lastName,
                 email,
-                education: JSON.parse(education),
-                skills: JSON.parse(skills)
+                education: education,
+                skills: skills
             }
         });
         return res.json(applicant);

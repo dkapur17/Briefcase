@@ -1,8 +1,12 @@
+import { useContext } from 'react';
 import StarRatings from 'react-star-ratings';
 
-const ApplicantShowProfile = (props) => {
+import UserContext from '../../contexts/UserContext';
 
-    const { user } = props;
+const ApplicantShowProfile = () => {
+
+    const { userData } = useContext(UserContext);
+    const { user } = userData;
 
     const instituteList = user.education.map((ed, i) => (<p className='text-center' key={i}>{ed.institute}</p>));
     const fromYearList = user.education.map((ed, i) => (<p className='text-center' key={i}>{ed.from}</p>));

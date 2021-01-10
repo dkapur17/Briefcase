@@ -10,12 +10,14 @@ import Navbar from './components/General/Layout/Navbar';
 import Home from './components/General/Home/Home';
 import Login from './components/General/Auth/Login';
 import Register from './components/General/Auth/Register';
+import FullPageSpinner from './components/General/Layout/FullPageSpinner';
 
 import UserContext from './contexts/UserContext';
 
 const App = () => {
 
   const [userData, setUserData] = useState({ token: undefined, user: undefined });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loginCheck = async () => {
@@ -31,6 +33,7 @@ const App = () => {
       setUserData({ token, user });
       if (!user)
         localStorage.setItem('auth-token', '');
+      setLoading(false);
     };
     loginCheck();
   }, []);
@@ -40,11 +43,11 @@ const App = () => {
       <BrowserRouter>
         <UserContext.Provider value={{ userData, setUserData }}>
           <Navbar />
-          <Switch>
+          {loading ? <FullPageSpinner /> : <Switch>
             <Route exact path='/' component={Home} />
             <Route exact path='/login' component={Login} />
             <Route exact path='/register' component={Register} />
-          </Switch>
+          </Switch>}
         </UserContext.Provider>
       </BrowserRouter>
     </>

@@ -41,7 +41,7 @@ router.post('/login', async (req, res) => {
         if (!email || !password)
             return res.status(400).json({ msg: "All fields not provided" });
 
-        const applicant = await Applicant.findOne({ email });
+        let applicant = await Applicant.findOne({ email });
         if (!applicant)
             return res.status(400).json({ msg: "This email is not registered" });
 
@@ -51,7 +51,7 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ msg: "Invalid login credentials" });
 
         const token = jwt.sign({ id: applicant._id, type: applicant.type }, process.env.JWT_SECRET);
-
+        applicant.password = undefined;
         return res.json({ token, applicant });
     }
     catch (err) {
@@ -89,9 +89,10 @@ router.post('/getUserData', async (req, res) => {
         const verified = jwt.verify(token, process.env.JWT_SECRET);
         if (!verified)
             return res.json(null);
-        const applicant = await Applicant.findById(verified.id);
+        let applicant = await Applicant.findById(verified.id);
         if (!applicant)
             return res.json(null);
+        applicant.password = undefined;
         return res.json(applicant);
     }
     catch (err) {

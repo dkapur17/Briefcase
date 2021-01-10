@@ -8,7 +8,7 @@ import RecruiterRegister from '../../Recruiters/RecruiterRegister';
 
 const Register = () => {
 
-    const [userType, setUserType] = useState("Applicant");
+    const [userType, setUserType] = useState("applicant");
     const { userData } = useContext(UserContext);
     const history = useHistory();
 
@@ -26,17 +26,17 @@ const Register = () => {
                     <ul className="nav nav-tabs col-4 row justify-content-center">
                         <li className="nav-item">
                             <button
-                                className={"nav-link " + (userType === 'Applicant' ? "active" : "")}
-                                onClick={() => setUserType("Applicant")}>Applicant</button>
+                                className={"nav-link " + (userType === 'applicant' ? "active" : "")}
+                                onClick={() => setUserType("applicant")}>Applicant</button>
                         </li>
                         <li className="nav-item">
-                            <button className={"nav-link " + (userType === 'Recruiter' ? "active" : "")}
-                                onClick={() => setUserType("Recruiter")}>Recruiter</button>
+                            <button className={"nav-link " + (userType === 'recruiter' ? "active" : "")}
+                                onClick={() => setUserType("recruiter")}>Recruiter</button>
                         </li>
                     </ul>
                 </div>
                 <div className="row justify-content-center">
-                    {userType === "Applicant" ? <ApplicantRegister /> : <RecruiterRegister />}
+                    {userType === "applicant" ? <ApplicantRegister /> : <RecruiterRegister />}
                 </div>
                 <p className="lead text-center">Already on Briefcase? <Link to='/login'>Log In</Link></p>
             </div>

@@ -3,8 +3,9 @@ import { NavLink } from 'react-router-dom';
 const ApplicantOptions = () => {
     return (
         <>
-            <NavLink className="nav-link mx-1" to='/ao1'>AO1</NavLink>
-            <NavLink className="nav-link mx-1" to="/ao2">AO2</NavLink>
+            <NavLink className="nav-link mx-1" to='/'>My Profile</NavLink>
+            <NavLink className="nav-link mx-1" to="/jobDashboard">Job Dashboard</NavLink>
+            <NavLink className="nav-link mx-1" to="/myApplications">My Applications</NavLink>
         </>
     )
 };

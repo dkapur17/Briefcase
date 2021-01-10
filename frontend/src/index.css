@@ -16,7 +16,7 @@ code {
 
 .navbar-brand {
   font-family: "Lato";
-  font-weight: 700;
+  font-weight: 900;
   letter-spacing: 1px;
   font-size: 1.75rem !important;
 }
@@ -36,4 +36,8 @@ code {
 
 button.nav-link:focus {
   outline: 0;
+}
+
+.hoverable-icon:hover {
+  cursor: pointer !important;
 }

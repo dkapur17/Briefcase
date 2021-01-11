@@ -14,6 +14,7 @@ const ApplicantEditProfile = (props) => {
     const [education, setEducation] = useState(userData.user.education);
     const [skills, setSkills] = useState(userData.user.skills);
     const [image, setImage] = useState(userData.user.image);
+    const [imageFileName, setImageFileName] = useState("Choose Profile Image");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -33,6 +34,7 @@ const ApplicantEditProfile = (props) => {
     });
 
     const handleImageChange = async (target) => {
+        setImageFileName(target.files[0].name);
         const imageFile = target.files[0];
         const imageString = await resizeImage(imageFile);
         console.log(imageString);
@@ -71,7 +73,7 @@ const ApplicantEditProfile = (props) => {
         <form className='col-7' onSubmit={handleSubmit}>
             <div className="custom-file mb-4 mt-2">
                 <input type="file" className="custom-file-input" id="image" accept=".png" onChange={({ target }) => handleImageChange(target)} />
-                <label className="custom-file-label" htmlFor="customFile">Choose Profile Image</label>
+                <label className="custom-file-label" htmlFor="customFile">{imageFileName}</label>
             </div>
             <div className="row justify-content-around">
                 <div className="form-group col-6">

@@ -64,21 +64,13 @@ router.patch('/editProfile', auth, async (req, res) => {
     try {
         const { firstName, lastName, email, education, skills, image } = req.body;
         const applicant = await Applicant.findByIdAndUpdate(req.user, {
-            $set: {
-                firstName,
-                lastName,
-                email,
-                education,
-                skills,
-                image
-            }
+            $set: { firstName, lastName, email, education, skills, image }
         });
         return res.json(applicant);
     }
     catch (err) {
         res.status(500).json({ error: err.message });
     }
-
 });
 
 router.post('/getUserData', async (req, res) => {

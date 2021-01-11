@@ -13,12 +13,14 @@ const RecruiterEditProfile = (props) => {
     const [phone, setPhone] = useState(userData.user.phone);
     const [bio, setBio] = useState(userData.user.bio);
     const [image, setImage] = useState(userData.user.image);
+    const [imageFileName, setImageFileName] = useState("Choose Profile Image");
 
     const resizeImage = file => new Promise(resolve => {
         Resizer.imageFileResizer(file, 100, 100, 'PNG', 100, 0, uri => resolve(uri), 'base64');
     });
 
     const handleImageChange = async (target) => {
+        setImageFileName(target.files[0].name);
         const imageFile = target.files[0];
         const imageString = await resizeImage(imageFile);
         console.log(imageString);
@@ -48,7 +50,7 @@ const RecruiterEditProfile = (props) => {
         <form className="col-7" onSubmit={handleSubmit}>
             <div className="custom-file mb-4 mt-2">
                 <input type="file" className="custom-file-input" id="image" accept=".png" onChange={({ target }) => handleImageChange(target)} />
-                <label className="custom-file-label" htmlFor="customFile">Choose Profile Image</label>
+                <label className="custom-file-label" htmlFor="customFile">{imageFileName}</label>
             </div>
             <div className="form-group">
                 <label htmlFor="name">Name</label>

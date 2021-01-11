@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: '2mb' }));
 app.use("/api/applicant", require('./routes/applicantRouter'));
 app.use("/api/recruiter", require('./routes/recruiterRouter'));
 app.use("/api/general", require('./routes/generalRouter'));

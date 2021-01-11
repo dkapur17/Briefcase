@@ -4,8 +4,9 @@ import axios from 'axios';
 
 import UserContext from '../../contexts/UserContext';
 
-const RecruiterLogin = () => {
+const RecruiterLogin = (props) => {
 
+    const { setLoading } = props;
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState();
@@ -15,10 +16,12 @@ const RecruiterLogin = () => {
     const handleSubmit = async (e) => {
         try {
             e.preventDefault();
+            setLoading(true);
             const loggedInUser = await axios.post('/api/recruiter/login', { email, password });
             console.log(loggedInUser);
             setUserData({ token: loggedInUser.data.token, user: loggedInUser.data.recruiter });
             localStorage.setItem("auth-token", loggedInUser.data.token);
+            setLoading(false);
             history.push('/');
         }
         catch (err) {

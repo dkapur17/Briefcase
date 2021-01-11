@@ -4,8 +4,9 @@ import axios from 'axios';
 
 import UserContext from '../../contexts/UserContext';
 
-const ApplicantRegister = () => {
+const ApplicantRegister = (props) => {
 
+    const { setLoading } = props;
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -18,12 +19,14 @@ const ApplicantRegister = () => {
     const handleSubmit = async (e) => {
         try {
             e.preventDefault();
+            setLoading(true);
             await axios.post('/api/applicant/register', {
                 email, firstName, lastName, password, confirmPassword
             });
             const loggedInUser = await axios.post('/api/applicant/login', { email, password });
             setUserData({ token: loggedInUser.data.token, user: loggedInUser.data.applicant });
             localStorage.setItem("auth-token", loggedInUser.data.token);
+            setLoading(false);
             history.push('/');
 
         }

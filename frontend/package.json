@@ -22,6 +22,7 @@
     "react-scripts": "4.0.1",
     "react-star-ratings": "^2.3.0",
     "shortid": "^2.2.16",
+    "sweetalert": "^2.1.2",
     "web-vitals": "^0.2.4"
   },
   "scripts": {

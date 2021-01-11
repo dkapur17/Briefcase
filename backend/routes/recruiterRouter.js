@@ -60,13 +60,14 @@ router.post('/login', async (req, res) => {
 
 router.patch('/editProfile', auth, async (req, res) => {
     try {
-        const { name, email, phone, bio } = req.body;
+        const { name, email, phone, bio, image } = req.body;
         const recruiter = await Recruiter.findByIdAndUpdate((req.user), {
             $set: {
                 name,
                 email,
                 phone,
-                bio
+                bio,
+                image
             }
         });
         return res.json(recruiter);

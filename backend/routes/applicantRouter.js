@@ -61,7 +61,6 @@ router.post('/login', async (req, res) => {
 });
 
 router.patch('/editProfile', auth, async (req, res) => {
-
     try {
         const { firstName, lastName, email, education, skills, image } = req.body;
         const applicant = await Applicant.findByIdAndUpdate(req.user, {

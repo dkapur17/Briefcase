@@ -20,8 +20,7 @@ const ApplicantEditProfile = (props) => {
         const editedUser = { ...(userData.user), firstName, lastName, email, education, skills, image }
         setUserData({ ...userData, user: editedUser });
         try {
-            const res = await axios.patch('/api/applicant/editProfile', editedUser, { headers: { 'auth-token': userData.token } });
-            console.log(res.data);
+            await axios.patch('/api/applicant/editProfile', editedUser, { headers: { 'auth-token': userData.token } });
         }
         catch (err) {
             console.log(err.response.data.msg)

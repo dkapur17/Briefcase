@@ -17,6 +17,7 @@
     "popper.js": "^1.16.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-image-file-resizer": "^0.3.10",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "react-star-ratings": "^2.3.0",

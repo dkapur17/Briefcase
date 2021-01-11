@@ -16,7 +16,7 @@ const ApplicantShowProfile = () => {
 
     return (
         <>
-            <img className='mb-2' src={`data:image/png;base64,${user.image}`} alt='profile_image' style={{ height: "100px", width: "100px" }} />
+            <img className='mb-2 rounded-circle' src={user.image} alt='profile_image' style={{ height: "100px", width: "100px" }} />
             <div className='row mb-2'>
                 <StarRatings
                     rating={ratingAvg}

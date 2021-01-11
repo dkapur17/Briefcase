@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react';
 import { generate } from 'shortid';
+import Resizer from 'react-image-file-resizer';
 import axios from 'axios';
 
 import UserContext from '../../contexts/UserContext';
@@ -26,6 +27,17 @@ const ApplicantEditProfile = (props) => {
             console.log(err.response.data.msg)
         }
         setIsEditing(false);
+    }
+
+    const resizeImage = file => new Promise(resolve => {
+        Resizer.imageFileResizer(file, 100, 100, 'PNG', 100, 0, uri => resolve(uri), 'base64');
+    });
+
+    const handleImageChange = async (target) => {
+        const imageFile = target.files[0];
+        const imageString = await resizeImage(imageFile);
+        console.log(imageString);
+        await setImage(imageString);
     }
 
     const educationInputList = education.map((ed) =>
@@ -58,6 +70,10 @@ const ApplicantEditProfile = (props) => {
 
     return (
         <form className='col-7' onSubmit={handleSubmit}>
+            <div className="custom-file mb-4 mt-2">
+                <input type="file" className="custom-file-input" id="image" accept=".png" onChange={({ target }) => handleImageChange(target)} />
+                <label className="custom-file-label" htmlFor="customFile">Choose Profile Image</label>
+            </div>
             <div className="row justify-content-around">
                 <div className="form-group col-6">
                     <label htmlFor="firstName">First Name</label>

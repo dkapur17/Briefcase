@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const auth = require('../middleware/auth');
 const Recruiter = require('../models/recruiterModel');
+const Job = require('../models/jobModel');
 
 router.post('/register', async (req, res) => {
     try {
@@ -81,6 +82,32 @@ router.post('/getUserData', auth, async (req, res) => {
     }
     catch (err) {
         return res.status(500).json({ error: err.message });
+    }
+});
+
+router.post('/createJob', auth, async (req, res) => {
+    try {
+        const { title, recruiterName, recruiterEmail, maxApplications, maxPositions, deadline, postDate, skills, jobType, duration, salary } = req.body;
+
+        const newJob = Job({ title, recruiterName, recruiterEmail, maxApplications, maxPositions, deadline, postDate, skills, jobType, duration, salary });
+        const savedJob = await newJob.save();
+        return res.json(savedJob);
+    }
+    catch (err) {
+        console.log(err.message);
+        return res.status(500).json({ error: err.message });
+    }
+});
+
+router.post('/getActiveJobs', auth, async (req, res) => {
+    try {
+        const { email } = req.body;
+        const jobsListed = await Job.find({ recruiterEmail: email }).exec();
+        const activeJobs = jobsListed.filter(job => job.positionsFilled < job.maxPositions);
+        return res.json(activeJobs);
+    }
+    catch (err) {
+        return res.status(500).json({ msg: err.message });
     }
 });
 

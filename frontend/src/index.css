@@ -41,3 +41,14 @@ button.nav-link:focus {
 .hoverable-icon:hover {
   cursor: pointer !important;
 }
+
+.react-datetime-picker__wrapper {
+  border-radius: 4px;
+  padding: 0.3rem 0.5rem;
+  font-family: "Lato" !important;
+}
+
+.react-calendar {
+  border-radius: 4px;
+  font-family: "Lato" !important;
+}

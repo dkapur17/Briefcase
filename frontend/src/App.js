@@ -11,6 +11,8 @@ import Home from './components/General/Home/Home';
 import Login from './components/General/Auth/Login';
 import Register from './components/General/Auth/Register';
 import FullPageSpinner from './components/General/Layout/FullPageSpinner';
+import CreateJob from './components/Recruiters/CreateJob';
+import ActiveJobs from './components/Recruiters/ActiveJobs';
 
 import UserContext from './contexts/UserContext';
 
@@ -47,6 +49,8 @@ const App = () => {
             <Route exact path='/' component={Home} />
             <Route exact path='/login' component={Login} />
             <Route exact path='/register' component={Register} />
+            <Route exact path='/createJob' component={CreateJob} />
+            <Route exact path='/activeJobs' component={ActiveJobs} />
           </Switch>}
         </UserContext.Provider>
       </BrowserRouter>

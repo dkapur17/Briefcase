@@ -19,7 +19,7 @@ const Register = () => {
 
     return (
         <div className="container mt-3 mb-5">
-            <div className="d-flex-column">
+            <div className="d-flex flex-column">
                 <h1 className='text-center'>Welcome to Briefcase</h1>
                 <p className="lead text-center">Choose your role and fill in the required fields</p>
                 <div className="row justify-content-center">

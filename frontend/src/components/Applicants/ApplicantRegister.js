@@ -4,9 +4,11 @@ import axios from 'axios';
 
 import UserContext from '../../contexts/UserContext';
 
-const ApplicantRegister = (props) => {
+import FullPageSpinner from '../General/Layout/FullPageSpinner';
 
-    const { setLoading } = props;
+const ApplicantRegister = () => {
+
+    const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -33,6 +35,7 @@ const ApplicantRegister = (props) => {
         catch (err) {
             if (err.response.data.msg)
                 setErrorMessage(err.response.data.msg);
+            setLoading(false);
         }
 
     };
@@ -70,7 +73,10 @@ const ApplicantRegister = (props) => {
                 <label htmlFor="confirmPassword">Confirm password</label>
                 <input type="password" className="form-control" id="confirmPassword" value={confirmPassword} onChange={({ target }) => setConfirmPassword(target.value)} />
             </div>
-            <button type="submit" className="btn btn-outline-success btn-block mt-4">Register</button>
+            {loading ?
+                <FullPageSpinner /> :
+                <button type="submit" className="btn btn-outline-success btn-block mt-4">Register</button>
+            }
         </form>
     )
 };

@@ -73,15 +73,9 @@ router.patch('/editProfile', auth, async (req, res) => {
     }
 });
 
-router.post('/getUserData', async (req, res) => {
+router.post('/getUserData', auth, async (req, res) => {
     try {
-        const token = req.header("auth-token");
-        if (!token)
-            return res.json(null);
-        const verified = jwt.verify(token, process.env.JWT_SECRET);
-        if (!verified)
-            return res.json(null);
-        let applicant = await Applicant.findById(verified.id);
+        let applicant = await Applicant.findById(req.user);
         if (!applicant)
             return res.json(null);
         applicant.password = undefined;

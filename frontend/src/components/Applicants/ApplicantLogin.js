@@ -4,9 +4,11 @@ import axios from 'axios';
 
 import UserContext from '../../contexts/UserContext';
 
-const ApplicantLogin = (props) => {
+import FullPageSpinner from '../General/Layout/FullPageSpinner';
 
-    const { setLoading } = props;
+const ApplicantLogin = () => {
+
+    const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState();
@@ -26,6 +28,7 @@ const ApplicantLogin = (props) => {
         catch (err) {
             if (err.response.data.msg)
                 setErrorMessage(err.response.data.msg);
+            setLoading(false);
         }
     };
     return (
@@ -47,7 +50,10 @@ const ApplicantLogin = (props) => {
                 <label htmlFor="password">Password</label>
                 <input type="password" className="form-control" id="password" value={password} onChange={({ target }) => setPassword(target.value)} />
             </div>
-            <button type="submit" className="btn btn-outline-success btn-block mt-4">Login</button>
+            {loading ?
+                <FullPageSpinner /> :
+                <button type="submit" className="btn btn-outline-success btn-block mt-4">Login</button>
+            }
         </form>
     )
 };

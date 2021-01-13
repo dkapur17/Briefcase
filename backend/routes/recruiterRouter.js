@@ -124,7 +124,6 @@ router.delete('/deleteJob', auth, async (req, res) => {
 router.patch('/editJob', auth, async (req, res) => {
     try {
         const { editedJob } = req.body;
-        console.log(editedJob);
         const modifiedJob = await Job.findByIdAndUpdate(editedJob._id, editedJob);
         return res.json(modifiedJob);
     }

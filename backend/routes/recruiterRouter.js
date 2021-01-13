@@ -88,7 +88,6 @@ router.post('/getUserData', auth, async (req, res) => {
 router.post('/createJob', auth, async (req, res) => {
     try {
         const { title, recruiterName, recruiterEmail, maxApplications, maxPositions, deadline, postDate, skills, jobType, duration, salary } = req.body;
-
         const newJob = Job({ title, recruiterName, recruiterEmail, maxApplications, maxPositions, deadline, postDate, skills, jobType, duration, salary });
         const savedJob = await newJob.save();
         return res.json(savedJob);
@@ -107,7 +106,30 @@ router.post('/getActiveJobs', auth, async (req, res) => {
         return res.json(activeJobs);
     }
     catch (err) {
-        return res.status(500).json({ msg: err.message });
+        return res.status(500).json({ error: err.message });
+    }
+});
+
+router.delete('/deleteJob', auth, async (req, res) => {
+    try {
+        const { jobId } = req.body;
+        const response = await Job.findByIdAndDelete(jobId);
+        return res.json(response);
+    }
+    catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+});
+
+router.patch('/editJob', auth, async (req, res) => {
+    try {
+        const { editedJob } = req.body;
+        console.log(editedJob);
+        const modifiedJob = await Job.findByIdAndUpdate(editedJob._id, editedJob);
+        return res.json(modifiedJob);
+    }
+    catch (err) {
+        return res.status(500).json({ error: err.message });
     }
 });
 

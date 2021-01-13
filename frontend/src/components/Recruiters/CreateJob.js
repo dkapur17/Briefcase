@@ -19,7 +19,6 @@ const CreateJob = () => {
     const [jobType, setJobType] = useState('fullTime');
     const [duration, setDuration] = useState(0);
     const [salary, setSalary] = useState(0);
-    const [errorMessage, setErrorMessage] = useState('');
     const history = useHistory();
 
     useEffect(() => {
@@ -44,10 +43,7 @@ const CreateJob = () => {
             history.push('/activeJobs');
 
         } catch (err) {
-            if (err.response.data.msg)
-                setErrorMessage(err.response.data.msg);
-            else if (err.response.data.error)
-                setErrorMessage("Internal Server Error");
+            console.log(err);
             setLoading(false);
         }
     }
@@ -57,7 +53,6 @@ const CreateJob = () => {
             <div className="container mt-3 mb-5">
                 <div className="d-flex flex-column align-items-center">
                     <h1 className="text-center">Create New Job Listing</h1>
-                    {errorMessage ? <div class="alert alert-danger mt-3" role="alert">{errorMessage}</div> : null}
                     <form className='col-7' onSubmit={handleSubmission}>
                         <div className="form-group">
                             <label htmlFor="title">Job Title</label>

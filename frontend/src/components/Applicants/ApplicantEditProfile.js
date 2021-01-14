@@ -66,7 +66,6 @@ const ApplicantEditProfile = (props) => {
             setResumeFileName(target.files[0].name);
             const resumeFile = target.files[0];
             const resumeString = await toBase64(resumeFile);
-            console.log(resumeString);
             setResume(resumeString);
         }
     }
@@ -134,14 +133,23 @@ const ApplicantEditProfile = (props) => {
                     <input type="text" className="form-control" placeholder="Comma separated values" id="skills" value={skills.join().substr(skills.join()[0] === ',' ? 1 : 0)} onChange={({ target }) => setSkills(target.value.split(','))} />
                     <p>Some default skills you can choose: </p>
                     <div className="row justify-content-center">
-                        {defaultSkills.map(skill => skills.map(selectedSkill => selectedSkill.toLowerCase()).includes(skill.toLowerCase()) ?
+                        {defaultSkills.map((skill, i) => skills.map(selectedSkill => selectedSkill.toLowerCase()).includes(skill.toLowerCase()) ?
                             null :
-                            <span className="badge badge-primary mx-1 hoverable-icon" onClick={() => setSkills([...skills, skill])}>{skill}</span>)}
+                            <span key={i} className="badge badge-primary mx-1 hoverable-icon" onClick={() => setSkills([...skills, skill])}>{skill}</span>)}
                     </div>
                 </div>
-                <div className="custom-file mb-4 mt-2">
-                    <input type="file" className="custom-file-input" id="resume" accept=".pdf" onChange={({ target }) => handleResumeChange(target)} />
-                    <label className="custom-file-label" htmlFor="customFile">{resumeFileName}</label>
+                <div className="row justify-content-center">
+                    <div className="custom-file mt-2 col-12">
+                        <input type="file" className="custom-file-input" id="resume" accept=".pdf" onChange={({ target }) => handleResumeChange(target)} />
+                        <label className="custom-file-label" htmlFor="customFile">{resumeFileName}</label>
+                    </div>
+                    <button type='button' className="btn btn-outline-danger mt-4 mb-2"
+                        onClick={() => {
+                            swal({ title: "Removing Resumé", text: "Your resumé has been tagged for removal. If you hit \"Cancel\", your current resumé will be preserved. If you hit \"Submit\", the change removal will be applied.", icon: "warning" })
+                            setResumeFileName("Choose Resumé File (Upto 1MB)");
+                            setResume("");
+                        }}
+                    >Remove Resumé</button>
                 </div>
                 <div className="row justify-content-around">
                     <button type="button" className='btn btn-outline-danger' onClick={() => setIsEditing(false)}>Cancel</button>

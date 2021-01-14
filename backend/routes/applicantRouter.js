@@ -1,10 +1,13 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const moment = require('moment');
 
 const auth = require('../middleware/auth');
 const Applicant = require('../models/applicantModel');
 const Recruiter = require('../models/recruiterModel');
+const Job = require('../models/jobModel');
+const { json } = require('express');
+const recruiterModel = require('../models/recruiterModel');
 
 router.post('/register', async (req, res) => {
 
@@ -62,8 +65,50 @@ router.post('/getUserData', auth, async (req, res) => {
         return res.json(applicant);
     }
     catch (err) {
-        res.status(500).json({ error: err.message });
+        return res.status(500).json({ error: err.message });
     }
-})
+});
+
+router.get('/getActiveJobs', auth, async (req, res) => {
+    try {
+        const jobs = await Job.find({}).exec();
+        const activeJobs = jobs.filter(job => moment(job.deadline) > moment());
+        return res.json({ jobs: activeJobs });
+    }
+    catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+});
+
+router.post('/addApplication', auth, async (req, res) => {
+    try {
+        const { newApplication } = req.body;
+        const applicant = await Applicant.findById(req.user);
+        const modifiedApplicationsList = [...applicant.applications, newApplication];
+        await Applicant.findByIdAndUpdate(req.user, {
+            $set: { applications: modifiedApplicationsList }
+        });
+        return res.send("OK");
+
+    }
+    catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+});
+
+router.post('/addApplicationToJob', auth, async (req, res) => {
+    try {
+        const { newApplication } = req.body;
+        const currentJob = await Job.findById(newApplication.jobId);
+        const modifiedApplicationsList = [...currentJob.applications, newApplication];
+        await Job.findByIdAndUpdate(newApplication.jobId, {
+            $set: { applications: modifiedApplicationsList }
+        });
+        return res.json("OK");
+    }
+    catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+});
 
 module.exports = router;

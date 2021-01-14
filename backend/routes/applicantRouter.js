@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const auth = require('../middleware/auth');
 const Applicant = require('../models/applicantModel');
+const Recruiter = require('../models/recruiterModel');
 
 router.post('/register', async (req, res) => {
 
@@ -20,6 +21,11 @@ router.post('/register', async (req, res) => {
         const existingApplicant = await Applicant.findOne({ email });
         if (existingApplicant)
             return res.status(400).json({ msg: "Account with this email already exists" });
+        else {
+            const existingRecruiter = await Recruiter.findOne({ email });
+            if (existingRecruiter)
+                return res.status(400).json({ msg: "Account with this email already exists" });
+        }
 
         const salt = await bcrypt.genSalt();
         const passwordHash = await bcrypt.hash(password, salt);
@@ -27,32 +33,6 @@ router.post('/register', async (req, res) => {
         const newApplicant = Applicant({ firstName, lastName, email, password: passwordHash });
         const savedApplicant = await newApplicant.save();
         return res.json(savedApplicant);
-    }
-    catch (err) {
-        return res.status(500).json({ error: err.message });
-    }
-
-});
-
-router.post('/login', async (req, res) => {
-
-    try {
-        const { email, password } = req.body;
-        if (!email || !password)
-            return res.status(400).json({ msg: "All fields not provided" });
-
-        let applicant = await Applicant.findOne({ email });
-        if (!applicant)
-            return res.status(400).json({ msg: "This email is not registered" });
-
-        const isMatch = await bcrypt.compare(password, applicant.password);
-
-        if (!isMatch)
-            return res.status(400).json({ msg: "Invalid login credentials" });
-
-        const token = jwt.sign({ id: applicant._id, type: applicant.type }, process.env.JWT_SECRET);
-        applicant.password = undefined;
-        return res.json({ token, applicant });
     }
     catch (err) {
         return res.status(500).json({ error: err.message });

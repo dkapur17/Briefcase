@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const auth = require('../middleware/auth');
+const Applicant = require('../models/applicantModel');
 const Recruiter = require('../models/recruiterModel');
 const Job = require('../models/jobModel');
 
@@ -20,6 +21,11 @@ router.post('/register', async (req, res) => {
         const existingRecruiter = await Recruiter.findOne({ email });
         if (existingRecruiter)
             return res.status(400).json({ msg: "Account with this email already exists" });
+        else {
+            const existingApplicant = await Applicant.findOne({ email });
+            if (existingApplicant)
+                return res.status(400).json({ msg: "Account with this email already exists" });
+        }
 
         const salt = await bcrypt.genSalt();
         const passwordHash = await bcrypt.hash(password, salt);
@@ -27,31 +33,6 @@ router.post('/register', async (req, res) => {
         const newRecruiter = Recruiter({ name, email, phone, password: passwordHash });
         const savedRecruiter = await newRecruiter.save();
         return res.json(savedRecruiter);
-
-    }
-    catch (err) {
-        return res.status(500).json({ error: err.message });
-    }
-});
-
-router.post('/login', async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        if (!email || !password)
-            return res.status(400).json({ msg: "All fields not provided" });
-
-        let recruiter = await Recruiter.findOne({ email });
-        if (!recruiter)
-            return res.status(400).json({ msg: "This email is not registered" });
-
-        const isMatch = await bcrypt.compare(password, recruiter.password);
-
-        if (!isMatch)
-            return res.status(400).json({ msg: "Invalid login credentials" });
-
-        const token = jwt.sign({ id: recruiter._id, type: recruiter.type }, process.env.JWT_SECRET);
-        recruiter.password = undefined;
-        return res.json({ token, recruiter });
 
     }
     catch (err) {

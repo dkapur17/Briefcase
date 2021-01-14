@@ -20,6 +20,7 @@ const ApplicantEditProfile = (props) => {
     const [resume, setResume] = useState(userData.user.resume);
     const [imageFileName, setImageFileName] = useState("Choose Profile Image");
     const [resumeFileName, setResumeFileName] = useState("Choose Resumé File (Upto 1MB)");
+    const [defaultSkills,] = useState(["HTML", "CSS", "JavaScript", "C++", "Python", "Tensorflow", "C#", "Unity"]);
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e) => {
@@ -130,7 +131,13 @@ const ApplicantEditProfile = (props) => {
                 </div>
                 <div className="form-group">
                     <label htmlFor="skills">Skills</label>
-                    <input type="text" className="form-control" placeholder="Comma separated values" id="skills" value={skills.join()} onChange={({ target }) => setSkills(target.value.split(','))} />
+                    <input type="text" className="form-control" placeholder="Comma separated values" id="skills" value={skills.join().substr(skills.join()[0] === ',' ? 1 : 0)} onChange={({ target }) => setSkills(target.value.split(','))} />
+                    <p>Some default skills you can choose: </p>
+                    <div className="row justify-content-center">
+                        {defaultSkills.map(skill => skills.map(selectedSkill => selectedSkill.toLowerCase()).includes(skill.toLowerCase()) ?
+                            null :
+                            <span className="badge badge-primary mx-1 hoverable-icon" onClick={() => setSkills([...skills, skill])}>{skill}</span>)}
+                    </div>
                 </div>
                 <div className="custom-file mb-4 mt-2">
                     <input type="file" className="custom-file-input" id="resume" accept=".pdf" onChange={({ target }) => handleResumeChange(target)} />

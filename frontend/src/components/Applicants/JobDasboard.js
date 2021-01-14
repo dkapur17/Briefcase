@@ -28,7 +28,7 @@ const JobDashboard = () => {
             }
         };
         getActiveJobs();
-    }, [userData.token]);
+    }, [userData.token, history, userData.user.type]);
     return (
         loading ? <FullPageSpinner />
             :

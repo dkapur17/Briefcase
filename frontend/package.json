@@ -13,6 +13,7 @@
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.21.1",
     "bootstrap": "^4.5.3",
+    "fuse.js": "^6.4.6",
     "jquery": "^3.4.1",
     "moment": "^2.29.1",
     "popper.js": "^1.16.1",

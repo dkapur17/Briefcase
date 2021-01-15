@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import Fuse from 'fuse.js';
 import axios from 'axios';
 
 import UserContext from '../../contexts/UserContext';
@@ -39,8 +40,12 @@ const JobDashboard = () => {
 
     useEffect(() => {
         // Search
-        const searchRE = new RegExp(searchString ? searchString.toLowerCase() : ".*");
-        let filteredList = allActiveJobs.filter(job => searchRE.test(job.title.toLowerCase()));
+
+        const fuzzyOptions = { includeScore: true, keys: ['title'] };
+        const fuse = new Fuse(allActiveJobs, fuzzyOptions);
+        const fuzzyResult = fuse.search(searchString);
+        let filteredList = searchString ? fuzzyResult.map(fuzzyItem => fuzzyItem.refIndex).map(index => allActiveJobs[index]) : allActiveJobs;
+        
         // JobType
         filteredList = filteredList.filter(job => jobType === "any" ? true : job.jobType === jobType);
 
@@ -50,17 +55,12 @@ const JobDashboard = () => {
         // Duration
         filteredList = filteredList.filter(job => job.duration < durationUpperLimit);
 
-        // Sort
-        filteredList.sort((a, b) => {
-            const coeff = sortStyle.order === "asc" ? 1 : -1;
-            if (sortStyle.attr === "salary")
-                return coeff * (a.salary - b.salary);
-            else if (sortStyle.attr === "duration")
-                return coeff * (a.duration - b.duration);
-        });
+        // Sorting
+        filteredList = filteredList.map(job => ({ ...job, ratingVal: job.rating.length ? job.rating.reduce((p, a) => p + a, 0) / job.rating.length : 0 }));
+        filteredList.sort((a, b) => sortStyle.attr === "none" ? null : (sortStyle.order === "asc" ? 1 : -1) * (a[sortStyle.attr] - b[sortStyle.attr]));
 
         setVisibleJobs(filteredList);
-    }, [searchString, jobType, salaryRange, durationUpperLimit, sortStyle]);
+    }, [searchString, jobType, salaryRange, durationUpperLimit, sortStyle, allActiveJobs]);
 
     return (
         loading ? <FullPageSpinner />
@@ -111,7 +111,7 @@ const JobDashboard = () => {
                                             <option value="none">None</option>
                                             <option value="salary">Salary</option>
                                             <option value="duration">Duration</option>
-                                            <option value="rating">Rating</option>
+                                            <option value="ratingVal">Rating</option>
                                         </select>
                                         <select value={sortStyle.order} onChange={({ target }) => setSortStyle({ ...sortStyle, order: target.value })} className="custom-select col-5">
                                             <option value="asc">Ascending</option>

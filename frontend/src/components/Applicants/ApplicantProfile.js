@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 
-import RecruiterShowProfile from './RecruiterShowProfile';
-import RecruiterEditProfile from './RecruiterEditProfile';
+import ApplicantShowProfile from './ApplicantShowProfile';
+import ApplicantEditProfile from './ApplicantEditProfile';
 
-const RecruiterHome = () => {
+const ApplicantProfile = () => {
 
     const [isEditing, setIsEditing] = useState(false);
 
@@ -19,10 +19,10 @@ const RecruiterHome = () => {
                             <FontAwesomeIcon className='hoverable-icon' icon={faPencilAlt} onClick={() => setIsEditing(true)} />
                         </h3>}
                 </div>
-                {isEditing ? <RecruiterEditProfile setIsEditing={setIsEditing} /> : <RecruiterShowProfile />}
+                {isEditing ? <ApplicantEditProfile setIsEditing={setIsEditing} /> : <ApplicantShowProfile />}
             </div>
         </div>
     )
 };
 
-export default RecruiterHome;
+export default ApplicantProfile;

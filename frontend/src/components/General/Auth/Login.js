@@ -28,7 +28,7 @@ const Login = () => {
             setUserData({ token: loggedInUser.data.token, user: loggedInUser.data.user });
             localStorage.setItem("auth-token", loggedInUser.data.token);
             setLoading(false);
-            history.push('/');
+            history.push(loggedInUser.data.user.type === "applicant" ? '/myApplications' : '/activeJobs');
         }
         catch (err) {
             if (err.response.data.msg)

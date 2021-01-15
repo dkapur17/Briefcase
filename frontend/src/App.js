@@ -8,6 +8,7 @@ import 'popper.js'
 
 import Navbar from './components/General/Layout/Navbar';
 import Home from './components/General/Home/Home';
+import MyProfile from './components/General/Home/MyProfile';
 import Login from './components/General/Auth/Login';
 import Register from './components/General/Auth/Register';
 import FullPageSpinner from './components/General/Layout/FullPageSpinner';
@@ -17,7 +18,7 @@ import JobDashboard from './components/Applicants/JobDasboard';
 
 import UserContext from './contexts/UserContext';
 
-const App = () => {
+const App = (props) => {
 
   const [userData, setUserData] = useState({ token: undefined, user: undefined });
   const [loading, setLoading] = useState(true);
@@ -50,6 +51,7 @@ const App = () => {
             <Route exact path='/' component={Home} />
             <Route exact path='/login' component={Login} />
             <Route exact path='/register' component={Register} />
+            <Route exact path='/myProfile' component={MyProfile} />
             <Route exact path='/createJob' component={CreateJob} />
             <Route exact path='/activeJobs' component={ActiveJobs} />
             <Route exact path='/jobDashboard' component={JobDashboard} />
@@ -60,4 +62,4 @@ const App = () => {
   )
 }
 
-export default App
+export default App;

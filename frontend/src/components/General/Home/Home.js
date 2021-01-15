@@ -1,10 +1,8 @@
 import { useContext } from 'react';
+import { Redirect } from 'react-router-dom';
 
 import UserContext from '../../../contexts/UserContext';
 import LoggedOutHome from './LoggedOutHome';
-
-import ApplicantHome from '../../Applicants/ApplicantHome';
-import RecruiterHome from '../../Recruiters/RecruiterHome';
 
 const Home = () => {
 
@@ -12,7 +10,7 @@ const Home = () => {
 
     return (
         <div className="container">
-            {!userData.user ? <LoggedOutHome /> : userData.user.type === "applicant" ? <ApplicantHome /> : <RecruiterHome />}
+            {!userData.user ? <LoggedOutHome /> : <Redirect to={userData.user.type === "applicant" ? "/myApplications" : "/activeJobs"} />}
         </div>
     )
 };

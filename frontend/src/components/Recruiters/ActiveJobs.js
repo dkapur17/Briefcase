@@ -35,7 +35,7 @@ const ActiveJobs = () => {
             }
         };
         getActiveJobs();
-    }, [history, userData.token, userData.user?.email, userData.user?.type]);
+    }, [history, userData.token, userData.user, userData.user?.email, userData.user?.type]);
 
     const handleDelete = async (jobId) => {
         const willDelete = await swal({

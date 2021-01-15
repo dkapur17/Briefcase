@@ -18,6 +18,7 @@ const JobDashboard = () => {
     const [jobType, setJobType] = useState("any");
     const [salaryRange, setSalaryRange] = useState([0, Infinity]);
     const [durationUpperLimit, setDurationUpperLimit] = useState(7);
+    const [userApplicationList, setUserApplicationList] = useState([]);
     const history = useHistory();
 
     useEffect(() => {
@@ -25,11 +26,13 @@ const JobDashboard = () => {
             history.push('/');
         else if (userData.user.type !== "applicant")
             history.push('/404');
-        const getActiveJobs = async () => {
+        const makeInitialAPICalls = async () => {
             try {
-                const response = await axios.get('/api/applicant/getActiveJobs', { headers: { 'auth-token': userData.token } });
+                let response = await axios.get('/api/applicant/getActiveJobs', { headers: { 'auth-token': userData.token } });
                 setAllActiveJobs(response.data.jobs);
                 setVisibleJobs(response.data.jobs);
+                response = await axios.get('/api/applicant/getAllApplications', { headers: { 'auth-token': userData.token } });
+                setUserApplicationList(response.data);
                 setLoading(false);
             }
             catch (err) {
@@ -37,8 +40,9 @@ const JobDashboard = () => {
                 setLoading(false);
             }
         };
-        getActiveJobs();
-    }, [userData.token, history, userData.user?.type]);
+        makeInitialAPICalls();
+    }, [userData.user, userData.token, history, userData.user?.type, userApplicationList]);
+
 
     useEffect(() => {
         // Search
@@ -128,7 +132,7 @@ const JobDashboard = () => {
                 <div className="row justify-content-center">
                     {
                         visibleJobs.length ?
-                            visibleJobs.map(job => <JobCard job={job} key={job._id} />) :
+                            visibleJobs.map(job => <JobCard job={job} key={job._id} userApplicationList={userApplicationList} />) :
                             <h1 className='display-3 text-center'>Looks like there aren't any jobs matching the search criteria 😢</h1>
                     }
                 </div>

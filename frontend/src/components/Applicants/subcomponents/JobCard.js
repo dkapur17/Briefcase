@@ -7,7 +7,7 @@ import axios from 'axios';
 import UserContext from '../../../contexts/UserContext';
 
 const JobCard = (props) => {
-    const { job } = props;
+    const { job, userApplicationList } = props;
     const { userData, setUserData } = useContext(UserContext);
     const [hasApplied, setHasApplied] = useState(false);
     const [applying, setApplying] = useState(false);
@@ -15,9 +15,9 @@ const JobCard = (props) => {
     const [SOP, setSOP] = useState('');
 
     useEffect(() => {
-        if (userData.user.applications.map(application => application.jobId).includes(job._id))
+        if (userApplicationList.map(application => application.jobId).includes(job._id))
             setHasApplied(true);
-    }, [job._id, userData.user.applications]);
+    }, [job._id, userApplicationList]);
 
 
     const handleSOPChange = (target) => {
@@ -26,9 +26,9 @@ const JobCard = (props) => {
     };
 
     const handleApply = () => {
-        if (userData.user.applications.filter(application => application.status === "accepted").length > 0)
+        if (userApplicationList.filter(application => application.status === "accepted").length > 0)
             swal({ text: "Looks like one of your applications has been accepted! However, as a result, you cannot apply to any other jobs at the moment.", icon: "warning" });
-        else if (userData.user.applications.filter(application => application.status === "applied" || application.status === "shortlisted").length >= 10)
+        else if (userApplicationList.filter(application => application.status === "applied" || application.status === "shortlisted").length >= 10)
             swal({ title: "Overachiever!", text: "You can't have more than 10 open applications at a time.", icon: "warning" });
         else
             setApplying(true);
@@ -38,28 +38,23 @@ const JobCard = (props) => {
         try {
             setLoading(true);
             const applicationDate = moment().format();
-            const userPerspectiveApplication = {
-                jobId: job._id,
-                status: "applied",
-                applicationDate,
-                title: job.title,
-                salary: job.salary,
-                recruiterName: job.recruiterName,
-            };
-            await axios.post('/api/applicant/addApplication', { newApplication: userPerspectiveApplication }, { headers: { 'auth-token': userData.token } });
-            setUserData({ ...userData, user: { ...userData.user, applications: [...userData.user.applications, userPerspectiveApplication] } });
-            const jobPerspectiveApplication = {
-                jobId: job._id,
-                applicantName: `${userData.user.firstName} ${userData.user.lastName}`,
+            const newApplication = {
                 applicantId: userData.user._id,
-                skills: userData.user.skills,
+                applicantName: `${userData.user.firstName} ${userData.user.lastName}`,
+                applicantSkills: userData.user.skills,
+                applicantEducation: userData.user.education,
                 applicationDate,
-                education: userData.user.education,
-                rating: userData.user.ratings,
-                sop: SOP,
+                recruiterId: job.recruiterId,
+                recruiterName: job.recruiterName,
+                jobId: job._id,
+                jobTitle: job.title,
+                jobSalary: job.salary,
+                applicantSOP: SOP,
                 status: "applied"
             };
-            await axios.post('/api/applicant/addApplicationToJob', { newApplication: jobPerspectiveApplication }, { headers: { 'auth-token': userData.token } });
+            console.log(newApplication);
+            const response = await axios.post('/api/applicant/addApplication', { newApplication }, { headers: { 'auth-token': userData.token } });
+            setUserData({ ...userData, user: { ...userData.user, applications: [...userData.user.applications, response.data.id] } });
             setLoading(false);
             setApplying(false);
         }
@@ -124,7 +119,6 @@ const JobCard = (props) => {
                         <p className='text-center mt-3'><strong>Required Skills: </strong>{job.skills.join(", ")}</p>
                         <p className="lead text-center text-danger mt-3">Deadline: {moment(job.deadline).format('LLLL')}</p>
                     </li>
-
                 }
             </ul>
         </div>

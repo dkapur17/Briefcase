@@ -68,9 +68,10 @@ router.post('/getUserData', auth, async (req, res) => {
 
 router.post('/createJob', auth, async (req, res) => {
     try {
-        const { title, recruiterName, recruiterEmail, maxApplications, maxPositions, deadline, postDate, skills, jobType, duration, salary } = req.body;
-        const newJob = Job({ title, recruiterName, recruiterEmail, maxApplications, maxPositions, deadline, postDate, skills, jobType, duration, salary });
-        const savedJob = await newJob.save();
+        const { newJob } = req.body;
+        console.log(newJob);
+        const newJobItem = Job(newJob);
+        const savedJob = await newJobItem.save();
         return res.json(savedJob);
     }
     catch (err) {

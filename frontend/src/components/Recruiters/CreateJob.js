@@ -26,7 +26,7 @@ const CreateJob = () => {
             history.push('/');
         else if (userData.user.type !== 'recruiter')
             history.push('/404');
-    });
+    }, [userData.user, history]);
 
     const handleSubmission = async (e) => {
         try {
@@ -35,10 +35,11 @@ const CreateJob = () => {
             const postDate = moment().format();
             const recruiterName = userData.user.name;
             const recruiterEmail = userData.user.email;
+            const recruiterId = userData.user._id;
             const skillArray = skills.split(',');
-            const newJob = { title, recruiterName, recruiterEmail, maxApplications, maxPositions, jobType, duration, salary, postDate, skills: skillArray, deadline: deadlineMoment };
+            const newJob = { title, recruiterName, recruiterEmail, recruiterId, maxApplications, maxPositions, jobType, duration, salary, postDate, skills: skillArray, deadline: deadlineMoment };
             setLoading(true);
-            await axios.post('/api/recruiter/createJob', newJob, {
+            await axios.post('/api/recruiter/createJob', { newJob }, {
                 headers: { 'auth-token': userData.token }
             });
             setLoading(false);

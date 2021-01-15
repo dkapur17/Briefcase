@@ -6,8 +6,7 @@ const auth = require('../middleware/auth');
 const Applicant = require('../models/applicantModel');
 const Recruiter = require('../models/recruiterModel');
 const Job = require('../models/jobModel');
-const { json } = require('express');
-const recruiterModel = require('../models/recruiterModel');
+const Application = require('../models/applicationModel');
 
 router.post('/register', async (req, res) => {
 
@@ -83,30 +82,33 @@ router.get('/getActiveJobs', auth, async (req, res) => {
 router.post('/addApplication', auth, async (req, res) => {
     try {
         const { newApplication } = req.body;
-        const applicant = await Applicant.findById(req.user);
-        const modifiedApplicationsList = [...applicant.applications, newApplication];
-        await Applicant.findByIdAndUpdate(req.user, {
-            $set: { applications: modifiedApplicationsList }
-        });
-        return res.send("OK");
+        const newApplicationItem = Application(newApplication);
+        const savedApplication = await newApplicationItem.save();
 
+        const applicant = await Applicant.findById(newApplication.applicantId);
+        const updatedUserApplications = [...applicant.applications, savedApplication._id];
+        await Applicant.findByIdAndUpdate(newApplication.applicantId, { $set: { applications: updatedUserApplications } });
+
+        const job = await Job.findById(newApplication.jobId);
+        const updatedJobApplications = [...job.applications, savedApplication._id];
+        await Job.findByIdAndUpdate(newApplication.jobId, { $set: { applications: updatedJobApplications } });
+
+        return res.json({ id: savedApplication._id });
     }
     catch (err) {
         return res.status(500).json({ error: err.message });
     }
 });
 
-router.post('/addApplicationToJob', auth, async (req, res) => {
+router.get('/getAllApplications', auth, async (req, res) => {
     try {
-        const { newApplication } = req.body;
-        const currentJob = await Job.findById(newApplication.jobId);
-        const modifiedApplicationsList = [...currentJob.applications, newApplication];
-        await Job.findByIdAndUpdate(newApplication.jobId, {
-            $set: { applications: modifiedApplicationsList }
-        });
-        return res.json("OK");
+
+        const applicationList = await Application.find({ applicantId: req.user }).exec();
+        return res.json(applicationList);
+
     }
     catch (err) {
+        console.log(err.message);
         return res.status(500).json({ error: err.message });
     }
 });

@@ -1,10 +1,10 @@
 import { useContext } from 'react';
 
 import UserContext from '../../../contexts/UserContext';
-import LoggedOutHome from './LoggedOutHome';
 
 import ApplicantProfile from '../../Applicants/ApplicantProfile';
 import RecruiterProfile from '../../Recruiters/RecruiterProfile';
+import { Redirect } from 'react-router-dom';
 
 const MyProfile = () => {
 
@@ -12,7 +12,7 @@ const MyProfile = () => {
 
     return (
         <div className="container">
-            {!userData.user ? <LoggedOutHome /> : userData.user.type === "applicant" ? <ApplicantProfile /> : <RecruiterProfile />}
+            {!userData.user ? <Redirect to='/' /> : userData.user.type === "applicant" ? <ApplicantProfile /> : <RecruiterProfile />}
         </div>
     )
 };

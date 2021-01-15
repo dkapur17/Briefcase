@@ -26,10 +26,12 @@ const JobCard = (props) => {
     };
 
     const handleApply = () => {
-        if (userData.user.applications.filter(application => application.status !== "accepted" && application.status !== "rejected").length < 10)
-            setApplying(true);
-        else
+        if (userData.user.applications.filter(application => application.status === "accepted").length > 0)
+            swal({ text: "Looks like one of your applications has been accepted! However, as a result, you cannot apply to any other jobs at the moment.", icon: "warning" });
+        else if (userData.user.applications.filter(application => application.status === "applied" || application.status === "shortlisted").length >= 10)
             swal({ title: "Overachiever!", text: "You can't have more than 10 open applications at a time.", icon: "warning" });
+        else
+            setApplying(true);
     }
 
     const handleSubmit = async () => {
@@ -42,13 +44,14 @@ const JobCard = (props) => {
                 applicationDate,
                 title: job.title,
                 salary: job.salary,
-                recruiterName: job.recruiterName
+                recruiterName: job.recruiterName,
             };
             await axios.post('/api/applicant/addApplication', { newApplication: userPerspectiveApplication }, { headers: { 'auth-token': userData.token } });
             setUserData({ ...userData, user: { ...userData.user, applications: [...userData.user.applications, userPerspectiveApplication] } });
             const jobPerspectiveApplication = {
                 jobId: job._id,
                 applicantName: `${userData.user.firstName} ${userData.user.lastName}`,
+                applicantId: userData.user._id,
                 skills: userData.user.skills,
                 applicationDate,
                 education: userData.user.education,

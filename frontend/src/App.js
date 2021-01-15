@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap';
@@ -55,6 +55,7 @@ const App = (props) => {
             <Route exact path='/createJob' component={CreateJob} />
             <Route exact path='/activeJobs' component={ActiveJobs} />
             <Route exact path='/jobDashboard' component={JobDashboard} />
+            <Redirect to='/404' />
           </Switch>}
         </UserContext.Provider>
       </BrowserRouter>

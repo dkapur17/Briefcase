@@ -16,7 +16,9 @@ const ActiveJobs = () => {
     const history = useHistory();
 
     useEffect(() => {
-        if (userData.user.type !== 'recruiter')
+        if (!userData.user)
+            history.push('/');
+        else if (userData.user.type !== 'recruiter')
             history.push('/404');
         const getActiveJobs = async () => {
             try {
@@ -33,7 +35,7 @@ const ActiveJobs = () => {
             }
         };
         getActiveJobs();
-    }, [history, userData.token, userData.user.email, userData.user.type]);
+    }, [history, userData.token, userData.user?.email, userData.user?.type]);
 
     const handleDelete = async (jobId) => {
         const willDelete = await swal({

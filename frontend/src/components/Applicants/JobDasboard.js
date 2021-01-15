@@ -21,7 +21,9 @@ const JobDashboard = () => {
     const history = useHistory();
 
     useEffect(() => {
-        if (userData.user.type !== "applicant")
+        if (!userData.user)
+            history.push('/');
+        else if (userData.user.type !== "applicant")
             history.push('/404');
         const getActiveJobs = async () => {
             try {
@@ -36,7 +38,7 @@ const JobDashboard = () => {
             }
         };
         getActiveJobs();
-    }, [userData.token, history, userData.user.type]);
+    }, [userData.token, history, userData.user?.type]);
 
     useEffect(() => {
         // Search
@@ -45,7 +47,7 @@ const JobDashboard = () => {
         const fuse = new Fuse(allActiveJobs, fuzzyOptions);
         const fuzzyResult = fuse.search(searchString);
         let filteredList = searchString ? fuzzyResult.map(fuzzyItem => fuzzyItem.refIndex).map(index => allActiveJobs[index]) : allActiveJobs;
-        
+
         // JobType
         filteredList = filteredList.filter(job => jobType === "any" ? true : job.jobType === jobType);
 

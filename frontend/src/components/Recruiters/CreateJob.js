@@ -22,7 +22,9 @@ const CreateJob = () => {
     const history = useHistory();
 
     useEffect(() => {
-        if (userData.user.type !== 'recruiter')
+        if (!userData.user)
+            history.push('/');
+        else if (userData.user.type !== 'recruiter')
             history.push('/404');
     });
 

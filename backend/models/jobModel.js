@@ -14,7 +14,7 @@ const jobSchema = new mongoose.Schema({
     duration: { type: Number, required: true },
     salary: { type: Number, required: true },
     rating: { type: Array, "default": [] },
-    applications: { type: Array, "default": [] },
+    applicationCount: { type: Number, "default": 0 },
     positionsFilled: { type: Number, "default": 0 }
 });
 

@@ -19,9 +19,9 @@ const EditableJobListing = (props) => {
     const saveEdits = async () => {
         try {
             setLoading(true);
-            if (Number(maxApplications) < currentJob.applications.length) {
+            if (Number(maxApplications) < currentJob.applicationCount) {
                 swal({
-                    text: `The value of Maximum Applications cannot be lower than the number of applications you have already recieved (which is ${currentJob.applications.length}). `,
+                    text: `The value of Maximum Applications cannot be lower than the number of applications you have already recieved (which is ${currentJob.applicationCount}). `,
                     icon: "error",
                     dangerMode: true
                 });
@@ -100,7 +100,7 @@ const EditableJobListing = (props) => {
                 <div className="card-body">
                     <p className="lead text-center">Posted: {moment(currentJob.postDate).format('L')}</p>
                     <div className="row justify-content-around">
-                        <p className="card-text"><strong>Applicants: </strong>{`${currentJob.applications.length}/${currentJob.maxApplications}`}</p>
+                        <p className="card-text"><strong>Applicants: </strong>{`${currentJob.applicationCount}/${currentJob.maxApplications}`}</p>
                         <p className="card-text"><strong>Positions: </strong>{`${currentJob.positionsFilled}/${currentJob.maxPositions}`}</p>
                     </div>
                     <div className="row justify-content-around">

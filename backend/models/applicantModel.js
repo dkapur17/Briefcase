@@ -10,8 +10,7 @@ const applicantSchema = new mongoose.Schema({
     resume: { type: String, "default": "" },
     education: { type: Array, "default": [] },
     skills: { type: Array, "default": [] },
-    ratings: { type: Array, "default": [] },
-    applications: { type: Array, "default": [] }
+    ratings: { type: Array, "default": [] }
 });
 
 module.exports = Applicant = mongoose.model("applicant", applicantSchema);

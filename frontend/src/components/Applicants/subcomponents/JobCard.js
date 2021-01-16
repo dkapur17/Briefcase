@@ -8,7 +8,7 @@ import UserContext from '../../../contexts/UserContext';
 
 const JobCard = (props) => {
     const { job, userApplicationList, setUserApplicationList } = props;
-    const { userData, setUserData } = useContext(UserContext);
+    const { userData } = useContext(UserContext);
     const [hasApplied, setHasApplied] = useState(false);
     const [applying, setApplying] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -54,7 +54,6 @@ const JobCard = (props) => {
                 status: "applied"
             };
             const response = await axios.post('/api/applicant/addApplication', { newApplication }, { headers: { 'auth-token': userData.token } });
-            setUserData({ ...userData, user: { ...userData.user, applications: [...userData.user.applications, response.data.id] } });
             setUserApplicationList([...userApplicationList, { ...newApplication, _id: response.data.id }]);
             setLoading(false);
             setApplying(false);
@@ -83,7 +82,7 @@ const JobCard = (props) => {
                                 }
                             </div>
                             :
-                            (job.applications.length >= job.maxApplications || job.positionsFilled >= job.maxPositions) ?
+                            (job.applicationCount >= job.maxApplications || job.positionsFilled >= job.maxPositions) ?
                                 <button className="btn btn-danger" disabled>Full</button> :
                                 hasApplied ?
                                     <button className="btn btn-info" disabled>Applied</button> :

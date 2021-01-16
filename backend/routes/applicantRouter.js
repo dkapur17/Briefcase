@@ -85,13 +85,9 @@ router.post('/addApplication', auth, async (req, res) => {
         const newApplicationItem = Application(newApplication);
         const savedApplication = await newApplicationItem.save();
 
-        const applicant = await Applicant.findById(newApplication.applicantId);
-        const updatedUserApplications = [...applicant.applications, savedApplication._id];
-        await Applicant.findByIdAndUpdate(newApplication.applicantId, { $set: { applications: updatedUserApplications } });
-
         const job = await Job.findById(newApplication.jobId);
-        const updatedJobApplications = [...job.applications, savedApplication._id];
-        await Job.findByIdAndUpdate(newApplication.jobId, { $set: { applications: updatedJobApplications } });
+        const updatedApplicationCount = job.applicationCount + 1;
+        await Job.findByIdAndUpdate(newApplication.jobId, { $set: { applicationCount: updatedApplicationCount } });
 
         return res.json({ id: savedApplication._id });
     }

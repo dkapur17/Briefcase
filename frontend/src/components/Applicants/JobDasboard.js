@@ -41,7 +41,8 @@ const JobDashboard = () => {
             }
         };
         makeInitialAPICalls();
-    }, [userData.user, userData.token, history, userData.user?.type, userApplicationList]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
 
     useEffect(() => {
@@ -132,7 +133,7 @@ const JobDashboard = () => {
                 <div className="row justify-content-center">
                     {
                         visibleJobs.length ?
-                            visibleJobs.map(job => <JobCard job={job} key={job._id} userApplicationList={userApplicationList} />) :
+                            visibleJobs.map(job => <JobCard job={job} key={job._id} userApplicationList={userApplicationList} setUserApplicationList={setUserApplicationList} />) :
                             <h1 className='display-3 text-center'>Looks like there aren't any jobs matching the search criteria 😢</h1>
                     }
                 </div>

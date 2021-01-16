@@ -105,7 +105,6 @@ router.get('/getAllApplications', auth, async (req, res) => {
 
         const applicationList = await Application.find({ applicantId: req.user }).exec();
         return res.json(applicationList);
-
     }
     catch (err) {
         console.log(err.message);

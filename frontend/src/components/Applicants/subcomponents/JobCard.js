@@ -7,7 +7,7 @@ import axios from 'axios';
 import UserContext from '../../../contexts/UserContext';
 
 const JobCard = (props) => {
-    const { job, userApplicationList } = props;
+    const { job, userApplicationList, setUserApplicationList } = props;
     const { userData, setUserData } = useContext(UserContext);
     const [hasApplied, setHasApplied] = useState(false);
     const [applying, setApplying] = useState(false);
@@ -52,9 +52,9 @@ const JobCard = (props) => {
                 applicantSOP: SOP,
                 status: "applied"
             };
-            console.log(newApplication);
             const response = await axios.post('/api/applicant/addApplication', { newApplication }, { headers: { 'auth-token': userData.token } });
             setUserData({ ...userData, user: { ...userData.user, applications: [...userData.user.applications, response.data.id] } });
+            setUserApplicationList([...userApplicationList, { ...newApplication, _id: response.data.id }]);
             setLoading(false);
             setApplying(false);
         }

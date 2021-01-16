@@ -6,6 +6,7 @@ const applicationSchema = new mongoose.Schema({
     applicantSkills: { type: Array, required: true },
     applicantEducation: { type: Array, required: true },
     applicationDate: { type: String, required: true },
+    ratedByApplicant: { type: Boolean, "default": false },
     recruiterId: { type: String, required: true },
     recruiterName: { type: String, required: true },
     joiningDate: { type: String },

@@ -109,4 +109,18 @@ router.get('/getAllApplications', auth, async (req, res) => {
     }
 });
 
+router.post('/rateJob', auth, async (req, res) => {
+    try {
+        const { jobId, ratingValue, appId } = req.body;
+        const job = await Job.findById(jobId);
+        await Job.findByIdAndUpdate(jobId, { $set: { rating: [...job.rating, Number(ratingValue)] } });
+        await Application.findByIdAndUpdate(appId, { $set: { ratedByApplicant: true } });
+        return res.send("OK");
+    }
+    catch (err) {
+        console.log(err.message);
+        return res.status(500).json({ error: err.message });
+    }
+});
+
 module.exports = router;

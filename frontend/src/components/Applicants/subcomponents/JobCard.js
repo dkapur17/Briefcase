@@ -46,6 +46,7 @@ const JobCard = (props) => {
                 applicationDate,
                 recruiterId: job.recruiterId,
                 recruiterName: job.recruiterName,
+                joiningDate: "",
                 jobId: job._id,
                 jobTitle: job.title,
                 jobSalary: job.salary,

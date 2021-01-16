@@ -96,6 +96,7 @@ router.post('/addApplication', auth, async (req, res) => {
         return res.json({ id: savedApplication._id });
     }
     catch (err) {
+        console.log(err.message);
         return res.status(500).json({ error: err.message });
     }
 });

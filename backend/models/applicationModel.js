@@ -8,6 +8,7 @@ const applicationSchema = new mongoose.Schema({
     applicationDate: { type: String, required: true },
     recruiterId: { type: String, required: true },
     recruiterName: { type: String, required: true },
+    joiningDate: { type: String },
     jobId: { type: String, required: true },
     jobTitle: { type: String, required: true },
     jobSalary: { type: Number, required: true },

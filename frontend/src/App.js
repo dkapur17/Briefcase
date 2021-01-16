@@ -15,6 +15,7 @@ import FullPageSpinner from './components/General/Layout/FullPageSpinner';
 import CreateJob from './components/Recruiters/CreateJob';
 import ActiveJobs from './components/Recruiters/ActiveJobs';
 import JobDashboard from './components/Applicants/JobDasboard';
+import MyApplications from './components/Applicants/MyApplications';
 
 import UserContext from './contexts/UserContext';
 
@@ -55,6 +56,7 @@ const App = (props) => {
             <Route exact path='/createJob' component={CreateJob} />
             <Route exact path='/activeJobs' component={ActiveJobs} />
             <Route exact path='/jobDashboard' component={JobDashboard} />
+            <Route exact path='/myApplications' component={MyApplications} />
             <Redirect to='/404' />
           </Switch>}
         </UserContext.Provider>

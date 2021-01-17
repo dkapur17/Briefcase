@@ -72,7 +72,11 @@ router.get('/getActiveJobs', auth, async (req, res) => {
     try {
         const jobs = await Job.find({}).exec();
         const activeJobs = jobs.filter(job => moment(job.deadline) > moment());
-        return res.json({ jobs: activeJobs });
+        let activeJobsWithRecruiterInfo = await Promise.all(activeJobs.map(async (job) => {
+            const recruiter = await Recruiter.findById(job.recruiterId);
+            return { ...job._doc, recruiterName: recruiter.name, recruiterEmail: recruiter.email }
+        }));
+        return res.json({ jobs: activeJobsWithRecruiterInfo });
     }
     catch (err) {
         return res.status(500).json({ error: err.message });
@@ -101,7 +105,18 @@ router.get('/getAllApplications', auth, async (req, res) => {
     try {
 
         const applicationList = await Application.find({ applicantId: req.user }).exec();
-        return res.json(applicationList);
+        const applicationListWithExtraInfo = await Promise.all(applicationList.map(async (app) => {
+            const applicant = await Applicant.findById(app.applicantId);
+            const recruiter = await Recruiter.findById(app.recruiterId);
+            return {
+                ...app._doc,
+                applicantName: `${applicant.firstName} ${applicant.lastName}`,
+                applicantSkills: applicant.skills,
+                applicantEducation: applicant.education,
+                recruiterName: recruiter.name
+            }
+        }));
+        return res.json(applicationListWithExtraInfo);
     }
     catch (err) {
         console.log(err.message);

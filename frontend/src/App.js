@@ -16,6 +16,7 @@ import CreateJob from './components/Recruiters/CreateJob';
 import ActiveJobs from './components/Recruiters/ActiveJobs';
 import JobDashboard from './components/Applicants/JobDasboard';
 import MyApplications from './components/Applicants/MyApplications';
+import JobApplications from './components/Recruiters/JobApplications';
 
 import UserContext from './contexts/UserContext';
 
@@ -57,6 +58,7 @@ const App = (props) => {
             <Route exact path='/activeJobs' component={ActiveJobs} />
             <Route exact path='/jobDashboard' component={JobDashboard} />
             <Route exact path='/myApplications' component={MyApplications} />
+            <Route exact path='/viewApplications/:appId' component={JobApplications} />
             <Redirect to='/404' />
           </Switch>}
         </UserContext.Provider>

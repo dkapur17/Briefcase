@@ -33,11 +33,9 @@ const CreateJob = () => {
             e.preventDefault();
             const deadlineMoment = moment(deadline).format();
             const postDate = moment().format();
-            const recruiterName = userData.user.name;
-            const recruiterEmail = userData.user.email;
             const recruiterId = userData.user._id;
             const skillArray = skills.split(',');
-            const newJob = { title, recruiterName, recruiterEmail, recruiterId, maxApplications, maxPositions, jobType, duration, salary, postDate, skills: skillArray, deadline: deadlineMoment };
+            const newJob = { title, recruiterId, maxApplications, maxPositions, jobType, duration, salary, postDate, skills: skillArray, deadline: deadlineMoment };
             setLoading(true);
             await axios.post('/api/recruiter/createJob', { newJob }, {
                 headers: { 'auth-token': userData.token }

@@ -105,7 +105,7 @@ const EditableJobListing = (props) => {
                     </div>
                     <div className="row justify-content-around">
                         <button className="btn btn-outline-danger" onClick={() => handleDelete(currentJob._id)}>Delete</button>
-                        <Link to={`/viewApplications/${currentJob._id}`} className="btn btn-outline-info">View Application</Link>
+                        <Link to={`/viewApplications/${currentJob._id}`} className="btn btn-outline-info">View Applications</Link>
                     </div>
                 </div>
             </div>

@@ -82,8 +82,7 @@ router.post('/createJob', auth, async (req, res) => {
 
 router.post('/getActiveJobs', auth, async (req, res) => {
     try {
-        const { email } = req.body;
-        const jobsListed = await Job.find({ recruiterEmail: email }).exec();
+        const jobsListed = await Job.find({ recruiterId: req.user }).exec();
         const activeJobs = jobsListed.filter(job => job.positionsFilled < job.maxPositions);
         return res.json(activeJobs);
     }
@@ -113,5 +112,4 @@ router.patch('/editJob', auth, async (req, res) => {
         return res.status(500).json({ error: err.message });
     }
 });
-
 module.exports = router;

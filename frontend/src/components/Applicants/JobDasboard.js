@@ -34,6 +34,7 @@ const JobDashboard = () => {
                 response = await axios.get('/api/applicant/getAllApplications', { headers: { 'auth-token': userData.token } });
                 setUserApplicationList(response.data);
                 setLoading(false);
+                console.log("Repeat");
             }
             catch (err) {
                 console.log(err);
@@ -133,7 +134,7 @@ const JobDashboard = () => {
                 <div className="row justify-content-center">
                     {
                         visibleJobs.length ?
-                            visibleJobs.map(job => <JobCard job={job} key={job._id} userApplicationList={userApplicationList} setUserApplicationList={setUserApplicationList} />) :
+                            visibleJobs.map((job, i) => <JobCard job={job} key={job._id} i={i} userApplicationList={userApplicationList} setUserApplicationList={setUserApplicationList} />) :
                             <h1 className='display-3 text-center'>Looks like there aren't any jobs matching the search criteria 😢</h1>
                     }
                 </div>

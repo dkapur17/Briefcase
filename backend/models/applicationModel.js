@@ -2,13 +2,9 @@ const mongoose = require('mongoose');
 
 const applicationSchema = new mongoose.Schema({
     applicantId: { type: String, required: true },
-    applicantName: { type: String, required: true },
-    applicantSkills: { type: Array, required: true },
-    applicantEducation: { type: Array, required: true },
     applicationDate: { type: String, required: true },
     ratedByApplicant: { type: Boolean, "default": false },
     recruiterId: { type: String, required: true },
-    recruiterName: { type: String, required: true },
     joiningDate: { type: String },
     jobId: { type: String, required: true },
     jobTitle: { type: String, required: true },

@@ -23,6 +23,7 @@ const MyApplications = () => {
         const getUserApplications = async () => {
             try {
                 const response = await axios.get('/api/applicant/getAllApplications', { headers: { 'auth-token': userData.token } });
+                console.log(response.data);
                 setUserApplications(response.data);
                 setLoading(false);
             }

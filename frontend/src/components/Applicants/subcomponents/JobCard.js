@@ -40,12 +40,8 @@ const JobCard = (props) => {
             const applicationDate = moment().format();
             const newApplication = {
                 applicantId: userData.user._id,
-                applicantName: `${userData.user.firstName} ${userData.user.lastName}`,
-                applicantSkills: userData.user.skills,
-                applicantEducation: userData.user.education,
                 applicationDate,
                 recruiterId: job.recruiterId,
-                recruiterName: job.recruiterName,
                 joiningDate: "",
                 jobId: job._id,
                 jobTitle: job.title,

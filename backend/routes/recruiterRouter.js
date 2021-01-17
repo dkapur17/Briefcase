@@ -6,6 +6,7 @@ const auth = require('../middleware/auth');
 const Applicant = require('../models/applicantModel');
 const Recruiter = require('../models/recruiterModel');
 const Job = require('../models/jobModel');
+const Application = require('../models/applicationModel');
 
 router.post('/register', async (req, res) => {
     try {
@@ -95,6 +96,7 @@ router.delete('/deleteJob', auth, async (req, res) => {
     try {
         const { jobId } = req.body;
         const response = await Job.findByIdAndDelete(jobId);
+        await Application.updateMany({ jobId }, { $set: { status: "deleted" } });
         return res.json(response);
     }
     catch (err) {
@@ -112,4 +114,58 @@ router.patch('/editJob', auth, async (req, res) => {
         return res.status(500).json({ error: err.message });
     }
 });
+
+router.post('/getJobApplications', auth, async (req, res) => {
+    try {
+        const { jobId } = req.body;
+        const applications = await Application.find({ jobId, status: { $ne: "rejected" } }).exec();
+        const applicationsWithExtraInfo = await Promise.all(applications.map(async (app) => {
+            const applicant = await Applicant.findById(app.applicantId);
+            return {
+                ...app._doc,
+                applicantName: `${applicant.firstName} ${applicant.lastName}`,
+                applicantSkills: applicant.skills,
+                applicantEducation: applicant.education,
+                applicantRating: applicant.ratings.reduce((p, a) => p + a, 0) / Math.max(1, applicant.ratings.length)
+            };
+        }));
+        return res.json(applicationsWithExtraInfo);
+    }
+    catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+});
+
+router.post('/setApplicationStatus', auth, async (req, res) => {
+    try {
+        const { appId, status } = req.body;
+        await Application.findByIdAndUpdate(appId, { $set: { status } });
+        return res.send("OK");
+    }
+    catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+});
+
+router.post('/acceptApplication', auth, async (req, res) => {
+    try {
+        const { applicationId, applicantId, jobId, recruiterId } = req.body;
+        await Application.updateMany({ applicantId, status: { $ne: "deleted" } }, { $set: { status: "rejected" } });
+        await Application.findByIdAndUpdate(applicationId, { $set: { status: "accepted" } });
+
+        const job = await Job.findById(jobId);
+        const updatedPositionsCount = job.positionsFilled + 1;
+        await Job.findByIdAndUpdate(jobId, { $set: { positionsFilled: updatedPositionsCount } });
+
+        const recruiter = await Recruiter.findById(recruiterId);
+        const updatedRecruitList = [...recruiter.recruits, { applicantId, rated: false }];
+        await Recruiter.findByIdAndUpdate(recruiterId, { $set: { recruits: updatedRecruitList } });
+
+        return res.send("OK");
+    }
+    catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+});
+
 module.exports = router;

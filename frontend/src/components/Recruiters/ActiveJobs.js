@@ -65,18 +65,12 @@ const ActiveJobs = () => {
         }
     };
 
-    const activeJobCards = activeJobs.map(job => {
-        return (
-            <EditableJobListing job={job} handleDelete={handleDelete} token={userData.token} key={job._id} />
-        );
-    });
-
     return (loading ? <FullPageSpinner /> :
-        <div className="container mt-5 mb-5">
+        <div className="container-fluid mt-5 mb-5 px-5">
             <div className="d-flex flex-column align-items-center">
                 <h1 className="text-center">Active Job Listings</h1>
                 <div className="row justify-content-center mt-3 w-100">
-                    {activeJobCards}
+                    {activeJobs.map(job => <EditableJobListing job={job} handleDelete={handleDelete} token={userData.token} key={job._id} />)}
                 </div>
             </div>
         </div>

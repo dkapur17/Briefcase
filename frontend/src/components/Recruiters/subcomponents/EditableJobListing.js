@@ -63,7 +63,7 @@ const EditableJobListing = (props) => {
 
     return (
         editing ?
-            <div className="card m-2 col-4 p-0">
+            <div className="card m-2 col-3 p-0">
                 <h5 className="card-header">
                     <div className="row justify-content-between px-3">
                         <span>{currentJob.title}</span>
@@ -90,7 +90,7 @@ const EditableJobListing = (props) => {
                 </div>
             </div>
             :
-            <div className="card m-2 col-4 p-0">
+            <div className="card m-2 col-3 p-0">
                 <h5 className="card-header">
                     <div className="row justify-content-between px-3">
                         <span>{currentJob.title}</span>

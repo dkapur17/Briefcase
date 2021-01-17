@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import UserContext from '../../../contexts/UserContext';
 
-const ApplicationColumn = (props) => {
+const ApplicationRow = (props) => {
     const { app, i, setUserApplications, allUserApplications } = props;
     const [ratedByApplicant, setRatedByApplicant] = useState(allUserApplications[i].ratedByApplicant);
     const { userData } = useContext(UserContext);
@@ -28,7 +28,7 @@ const ApplicationColumn = (props) => {
     }
     return (
         <tr key={app._id}>
-            <th scope="row">{i + 1}</th>
+            <th scope="row" className='text-center'>{i + 1}</th>
             <td className='text-center px-0'>{app.jobTitle}</td>
             <td className='text-center'>{app.joiningDate ? moment(app.joiningDate).format('L') : "-"}</td>
             <td className='text-center'>{app.jobSalary}</td>
@@ -64,4 +64,4 @@ const ApplicationColumn = (props) => {
     )
 }
 
-export default ApplicationColumn;
+export default ApplicationRow;

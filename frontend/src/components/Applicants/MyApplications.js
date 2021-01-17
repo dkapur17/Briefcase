@@ -5,7 +5,7 @@ import axios from 'axios';
 import UserContext from '../../contexts/UserContext';
 
 import FullPageSpinner from '../General/Layout/FullPageSpinner';
-import ApplicationColumn from './subcomponents/ApplicationColumn';
+import ApplicationRow from './subcomponents/ApplicationRow';
 
 const MyApplications = () => {
 
@@ -40,7 +40,7 @@ const MyApplications = () => {
         loading ? <FullPageSpinner /> :
             <div className="container-fluid px-5 mt-3 mb-5">
                 <h1 className="text-center">My Applications</h1>
-                <table className="table mt-5">
+                <table className="table mt-5 table-striped">
                     <thead className='thead-dark'>
                         <tr>
                             <th className='text-center' scope="col">#</th>
@@ -53,7 +53,7 @@ const MyApplications = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {userApplications.map((app, i) => <ApplicationColumn key={app._id} app={app} allUserApplications={userApplications} setUserApplications={setUserApplications} i={i} />)}
+                        {userApplications.map((app, i) => <ApplicationRow key={app._id} app={app} allUserApplications={userApplications} setUserApplications={setUserApplications} i={i} />)}
                     </tbody>
                 </table>
             </div>

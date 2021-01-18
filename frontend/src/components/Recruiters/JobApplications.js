@@ -68,6 +68,7 @@ const JobApplications = (props) => {
                             <th className='text-center' scope="col">Education</th>
                             <th className='text-center' scope="col">SOP</th>
                             <th className='text-center' scope="col">Rating <FontAwesomeIcon className="ml-2 hoverable-icon" icon={faSort} onClick={() => handleSort("applicantRating")} /></th>
+                            <th className='text-center' scope="col">Resumé</th>
                             <th className='text-center' scope="col">Status</th>
                             <th className='text-center' scope="col">Actions</th>
                         </tr>

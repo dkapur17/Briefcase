@@ -19,7 +19,7 @@ const ApplicantEditProfile = (props) => {
     const [image, setImage] = useState(userData.user.image);
     const [resume, setResume] = useState(userData.user.resume);
     const [imageFileName, setImageFileName] = useState("Choose Profile Image");
-    const [resumeFileName, setResumeFileName] = useState("Choose Resumé File (Upto 1MB)");
+    const [resumeFileName, setResumeFileName] = useState("Choose Resumé File (Upto 250Kb)");
     const [defaultSkills,] = useState(["HTML", "CSS", "JavaScript", "C++", "Python", "Tensorflow", "C#", "Unity"]);
     const [loading, setLoading] = useState(false);
 
@@ -58,8 +58,8 @@ const ApplicantEditProfile = (props) => {
     });
 
     const handleResumeChange = async (target) => {
-        if (target.files[0].size / 1024 / 1024 > 1) {
-            swal("Unable to upload selected file.", "Please select a file smaller than 1MB.");
+        if (target.files[0].size / 1024 > 250) {
+            swal("Unable to upload selected file.", "Please select a file smaller than 250KB.");
             target.value = '';
         }
         else {

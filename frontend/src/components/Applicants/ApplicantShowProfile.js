@@ -71,7 +71,7 @@ const ApplicantShowProfile = () => {
             <div className="row justify-content-center" >
                 {skillList}
             </div>
-            {user.resume ? <h5 className='mt-4'><a download='Resume.pdf' href={user.resume}>Download Resumé</a></h5> : null}
+            {user.resume ? <a className='btn btn-outline-info mt-3' download='Resume.pdf' href={user.resume}>Download Resumé</a> : null}
         </>
     )
 };

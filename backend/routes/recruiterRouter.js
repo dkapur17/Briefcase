@@ -126,7 +126,8 @@ router.post('/getJobApplications', auth, async (req, res) => {
                 applicantName: `${applicant.firstName} ${applicant.lastName}`,
                 applicantSkills: applicant.skills,
                 applicantEducation: applicant.education,
-                applicantRating: applicant.ratings.reduce((p, a) => p + a, 0) / Math.max(1, applicant.ratings.length)
+                applicantRating: applicant.ratings.reduce((p, a) => p + a, 0) / Math.max(1, applicant.ratings.length),
+                applicantResume: applicant.resume
             };
         }));
         return res.json(applicationsWithExtraInfo);

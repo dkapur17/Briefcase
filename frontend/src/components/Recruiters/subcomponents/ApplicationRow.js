@@ -3,6 +3,8 @@ import moment from 'moment';
 import swal from 'sweetalert';
 import StarRatings from 'react-star-ratings';
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFileDownload } from '@fortawesome/free-solid-svg-icons';
 
 import UserContext from '../../../contexts/UserContext';
 
@@ -55,6 +57,11 @@ const ApplicationRow = (props) => {
                     starSpacing="2px"
                     name='rating'
                 />
+            </td>
+            <td className='text-center'>
+                {app.applicantResume ? <h4 className='mt-2'>
+                    <a href={app.applicantResume} download={`${app.applicantName}_Resume.pdf`}><FontAwesomeIcon icon={faFileDownload} /></a>
+                </h4> : null}
             </td>
             <td className={`text-center text-${{ applied: "info", shortlisted: "warning", accepted: "success", rejected: "danger", deleted: "secondary" }[app.status]}`}>{app.status.toUpperCase()}</td>
             {

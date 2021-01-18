@@ -25,11 +25,11 @@ const ApplicantRegister = () => {
             await axios.post('/api/applicant/register', {
                 email, firstName, lastName, password, confirmPassword
             });
-            const loggedInUser = await axios.post('/api/applicant/login', { email, password });
-            setUserData({ token: loggedInUser.data.token, user: loggedInUser.data.applicant });
+            const loggedInUser = await axios.post('/api/general/login', { email, password });
+            setUserData({ token: loggedInUser.data.token, user: loggedInUser.data.user });
             localStorage.setItem("auth-token", loggedInUser.data.token);
             setLoading(false);
-            history.push('/');
+            history.push('/myProfile');
 
         }
         catch (err) {

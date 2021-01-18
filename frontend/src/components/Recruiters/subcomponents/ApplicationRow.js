@@ -37,7 +37,7 @@ const ApplicationRow = (props) => {
             <th className='text-center' scope="row">{i + 1}</th>
             <td className='text-center'>{app.applicantName}</td>
             <td className='text-center'>{app.applicantSkills.join(', ')}</td>
-            <td className='text-center'>{moment(app.applicationDate).format('L')}</td>
+            <td className='text-center'>{moment(app.applicationDate).format('DD-MM-YYYY')}</td>
             <td className="text-center">
                 <div className="d-flex flex-column align-items-center">
                     {app.applicantEducation.length ? app.applicantEducation.map(ed => <span key={ed.id}>{`${ed.institute} (${ed.from}-${ed.to ? ed.to : " "})`}</span>) : "-"}
@@ -61,15 +61,15 @@ const ApplicationRow = (props) => {
                 app.status === "applied" ?
                     <td className="text-center">
                         <div className='d-flex flex-column align-items-center my-1'>
-                            <button className="btn btn-outline-warning mt-1" onClick={() => modifyStatus("shortlisted")}>Shortlist</button>
-                            <button className="btn btn-outline-danger mb-1" onClick={() => modifyStatus("rejected")}>Reject</button>
+                            <button className="btn btn-outline-warning mb-1" onClick={() => modifyStatus("shortlisted")}>Shortlist</button>
+                            <button className="btn btn-outline-danger mt-1" onClick={() => modifyStatus("rejected")}>Reject</button>
                         </div>
                     </td> :
                     app.status === "shortlisted" ?
                         <td className="text-center">
                             <div className='d-flex flex-column align-items-center my-1'>
-                                <button className="btn btn-outline-success mt-1" onClick={handleAccept}>Accept</button>
-                                <button className="btn btn-outline-danger mb-1" onClick={() => modifyStatus("rejected")}>Reject</button>
+                                <button className="btn btn-outline-success mb-1" onClick={handleAccept}>Accept</button>
+                                <button className="btn btn-outline-danger mt-1" onClick={() => modifyStatus("rejected")}>Reject</button>
                             </div>
                         </td>
                         : <td />

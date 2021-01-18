@@ -2,7 +2,8 @@ import { useContext, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort } from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios'
+import moment from 'moment';
+import axios from 'axios';
 
 import UserContext from '../../contexts/UserContext';
 
@@ -15,7 +16,21 @@ const JobApplications = (props) => {
     const { userData } = useContext(UserContext);
     const [loading, setLoading] = useState(true);
     const [applicationList, setApplicationList] = useState([]);
+    const [sortOrder, setSortOrder] = useState(-1);
     const history = useHistory();
+
+    const handleSort = (attr) => {
+        setSortOrder(sortOrder === -1 ? 1 : -1);
+        let modifiedApplicationList = applicationList;
+        if (attr === "applicantName")
+            modifiedApplicationList.sort((a, b) => sortOrder * ('' + a.applicantName).localeCompare(b.applicantName));
+        else if (attr === "applicationDate")
+            modifiedApplicationList.sort((a, b) => sortOrder * (moment(a.applicationDate).format('X') - moment(b.applicationDate).format('X')))
+        else
+            modifiedApplicationList.sort((a, b) => sortOrder * (a.applicantRating - b.applicantRating));
+
+        setApplicationList(modifiedApplicationList);
+    };
 
     useEffect(() => {
 
@@ -47,12 +62,12 @@ const JobApplications = (props) => {
                     <thead className='thead-dark'>
                         <tr>
                             <th className='text-center' scope="col">#</th>
-                            <th className='text-center' scope="col">Name <FontAwesomeIcon className="ml-2 hoverable-icon" icon={faSort} /></th>
+                            <th className='text-center' scope="col">Name <FontAwesomeIcon className="ml-2 hoverable-icon" icon={faSort} onClick={() => handleSort("applicantName")} /></th>
                             <th className='text-center' scope="col">Skills</th>
-                            <th className='text-center' scope="col">Application Date <FontAwesomeIcon className="ml-2 hoverable-icon" icon={faSort} /></th>
+                            <th className='text-center' scope="col">Application Date <FontAwesomeIcon className="ml-2 hoverable-icon" icon={faSort} onClick={() => handleSort("applicationDate")} /></th>
                             <th className='text-center' scope="col">Education</th>
                             <th className='text-center' scope="col">SOP</th>
-                            <th className='text-center' scope="col">Rating <FontAwesomeIcon className="ml-2 hoverable-icon" icon={faSort} /></th>
+                            <th className='text-center' scope="col">Rating <FontAwesomeIcon className="ml-2 hoverable-icon" icon={faSort} onClick={() => handleSort("applicantRating")} /></th>
                             <th className='text-center' scope="col">Status</th>
                             <th className='text-center' scope="col">Actions</th>
                         </tr>

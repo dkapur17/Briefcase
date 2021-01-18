@@ -78,10 +78,10 @@ const JobCard = (props) => {
                                 }
                             </div>
                             :
-                            (job.applicationCount >= job.maxApplications || job.positionsFilled >= job.maxPositions) ?
-                                <button className="btn btn-danger" disabled>Full</button> :
-                                hasApplied ?
-                                    <button className="btn btn-info" disabled>Applied</button> :
+                            hasApplied ?
+                                <button className="btn btn-info" disabled>Applied</button> :
+                                (job.applicationCount >= job.maxApplications || job.positionsFilled >= job.maxPositions) ?
+                                    <button className="btn btn-danger" disabled>Full</button> :
                                     <button className="btn btn-outline-success" onClick={handleApply}>Apply</button>
                     }
                 </div>

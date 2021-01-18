@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const moment = require('moment');
 
 const auth = require('../middleware/auth');
 const Applicant = require('../models/applicantModel');
@@ -151,7 +151,7 @@ router.post('/acceptApplication', auth, async (req, res) => {
     try {
         const { applicationId, applicantId, jobId, recruiterId } = req.body;
         await Application.updateMany({ applicantId, status: { $ne: "deleted" } }, { $set: { status: "rejected" } });
-        await Application.findByIdAndUpdate(applicationId, { $set: { status: "accepted" } });
+        await Application.findByIdAndUpdate(applicationId, { $set: { status: "accepted", joiningDate: moment().format() } });
 
         const job = await Job.findById(jobId);
         const updatedPositionsCount = job.positionsFilled + 1;

@@ -16,14 +16,13 @@ const MyApplications = () => {
 
     useEffect(() => {
         if (!userData.user)
-            history.push('/');
+            return history.push('/');
         else if (userData.user.type !== "applicant")
-            history.push('/404');
+            return history.push('/404');
 
         const getUserApplications = async () => {
             try {
                 const response = await axios.get('/api/applicant/getAllApplications', { headers: { 'auth-token': userData.token } });
-                console.log(response.data);
                 setUserApplications(response.data);
                 setLoading(false);
             }

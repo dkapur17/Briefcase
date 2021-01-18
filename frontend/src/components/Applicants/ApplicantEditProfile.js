@@ -46,7 +46,6 @@ const ApplicantEditProfile = (props) => {
         setImageFileName(target.files[0].name);
         const imageFile = target.files[0];
         const imageString = await resizeImage(imageFile);
-        console.log(imageString);
         setImage(imageString);
     }
 

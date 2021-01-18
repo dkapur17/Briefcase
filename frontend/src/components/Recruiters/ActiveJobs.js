@@ -17,9 +17,9 @@ const ActiveJobs = () => {
 
     useEffect(() => {
         if (!userData.user)
-            history.push('/');
+            return history.push('/');
         else if (userData.user.type !== 'recruiter')
-            history.push('/404');
+            return history.push('/404');
         const getActiveJobs = async () => {
             try {
                 setLoading(true);
@@ -50,12 +50,10 @@ const ActiveJobs = () => {
                 setLoading(true);
                 const modifiedActiveJobs = activeJobs.filter(job => job._id !== jobId);
                 setActiveJobs(modifiedActiveJobs);
-                console.log(userData.token);
-                const response = await axios.delete('/api/recruiter/deleteJob', {
+                await axios.delete('/api/recruiter/deleteJob', {
                     headers: { 'auth-token': userData.token },
                     data: { jobId }
                 });
-                console.log(response);
                 setLoading(false);
             }
         }

@@ -20,7 +20,7 @@ const JobApplications = (props) => {
     const history = useHistory();
 
     const handleSort = (attr) => {
-        setSortOrder(sortOrder === -1 ? 1 : -1);
+        setSortOrder(-1 * sortOrder);
         let modifiedApplicationList = applicationList;
         if (attr === "applicantName")
             modifiedApplicationList.sort((a, b) => sortOrder * ('' + a.applicantName).localeCompare(b.applicantName));
@@ -35,9 +35,9 @@ const JobApplications = (props) => {
     useEffect(() => {
 
         if (!userData.user)
-            history.push('/');
+            return history.push('/');
         else if (userData.user.type !== "recruiter")
-            history.push('/404');
+            return history.push('/404');
         const getJobApplications = async () => {
             try {
                 const response = await axios.post('/api/recruiter/getJobApplications', { jobId }, { headers: { 'auth-token': userData.token } });

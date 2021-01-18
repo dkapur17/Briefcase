@@ -70,7 +70,6 @@ router.post('/getUserData', auth, async (req, res) => {
 router.post('/createJob', auth, async (req, res) => {
     try {
         const { newJob } = req.body;
-        console.log(newJob);
         const newJobItem = Job(newJob);
         const savedJob = await newJobItem.save();
         return res.json(savedJob);
@@ -165,6 +164,46 @@ router.post('/acceptApplication', auth, async (req, res) => {
         return res.send("OK");
     }
     catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+});
+
+router.get('/getRecruitList', auth, async (req, res) => {
+    try {
+        const recruiter = await Recruiter.findById(req.user);
+        const modifiedRecruitList = await Promise.all(recruiter.recruits.map(async (recruit) => {
+            const applicant = await Applicant.findById(recruit.applicantId);
+            const application = await Application.findOne({ recruiterId: req.user, applicantId: applicant._id, status: "accepted" });
+            const job = await Job.findById(application.jobId);
+            return {
+                ...recruit,
+                recruitName: `${applicant.firstName} ${applicant.lastName}`,
+                recruitRating: applicant.ratings.reduce((p, a) => p + a, 0) / Math.max(1, applicant.ratings.length),
+                joiningDate: application.joiningDate,
+                jobType: job.jobType,
+                jobTitle: job.title
+            };
+        }));
+
+        return res.json(modifiedRecruitList);
+    }
+    catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+});
+
+router.post('/rateRecruit', auth, async (req, res) => {
+    try {
+        const { applicantId, ratingValue } = req.body;
+        const recruiter = await Recruiter.findById(req.user);
+        const updatedRecruitList = recruiter.recruits.map(rec => rec.applicantId === applicantId ? { ...rec, rated: true } : rec);
+        await Recruiter.findByIdAndUpdate(req.user, { $set: { recruits: updatedRecruitList } });
+        const applicant = await Applicant.findById(applicantId);
+        await Applicant.findByIdAndUpdate(applicantId, { $set: { ratings: [...applicant.ratings, Number(ratingValue)] } });
+        return res.send("OK");
+    }
+    catch (err) {
+        console.log(err.message);
         return res.status(500).json({ error: err.message });
     }
 });

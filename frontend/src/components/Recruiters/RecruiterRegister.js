@@ -26,7 +26,6 @@ const RecruiterRegister = () => {
                 email, name, phone, password, confirmPassword
             });
             const loggedInUser = await axios.post('/api/general/login', { email, password });
-            console.log(loggedInUser);
             setUserData({ token: loggedInUser.data.token, user: loggedInUser.data.user });
             localStorage.setItem("auth-token", loggedInUser.data.token);
             setLoading(false);

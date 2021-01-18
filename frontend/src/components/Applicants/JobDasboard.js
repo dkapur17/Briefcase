@@ -23,9 +23,9 @@ const JobDashboard = () => {
 
     useEffect(() => {
         if (!userData.user)
-            history.push('/');
+            return history.push('/');
         else if (userData.user.type !== "applicant")
-            history.push('/404');
+            return history.push('/404');
         const makeInitialAPICalls = async () => {
             try {
                 let response = await axios.get('/api/applicant/getActiveJobs', { headers: { 'auth-token': userData.token } });
@@ -34,7 +34,6 @@ const JobDashboard = () => {
                 response = await axios.get('/api/applicant/getAllApplications', { headers: { 'auth-token': userData.token } });
                 setUserApplicationList(response.data);
                 setLoading(false);
-                console.log("Repeat");
             }
             catch (err) {
                 console.log(err);

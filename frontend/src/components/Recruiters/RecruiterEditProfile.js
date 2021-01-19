@@ -9,7 +9,7 @@ const RecruiterEditProfile = (props) => {
     const { setIsEditing } = props;
     const { userData, setUserData } = useContext(UserContext);
     const [name, setName] = useState(userData.user.name);
-    const [email, setEmail] = useState(userData.user.email);
+    const [email] = useState(userData.user.email);
     const [phone, setPhone] = useState(userData.user.phone);
     const [bio, setBio] = useState(userData.user.bio);
     const [image, setImage] = useState(userData.user.image);
@@ -54,10 +54,6 @@ const RecruiterEditProfile = (props) => {
             <div className="form-group">
                 <label htmlFor="name">Name</label>
                 <input type="text" className="form-control" id="name" required value={name} onChange={({ target }) => setName(target.value)} />
-            </div>
-            <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input type="email" className="form-control" id="email" required value={email} onChange={({ target }) => setEmail(target.value)} />
             </div>
             <div className="form-group">
                 <label htmlFor="phone">Contact Number</label>

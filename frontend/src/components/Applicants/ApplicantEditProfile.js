@@ -13,7 +13,7 @@ const ApplicantEditProfile = (props) => {
     const { userData, setUserData } = useContext(UserContext);
     const [firstName, setFirstName] = useState(userData.user.firstName);
     const [lastName, setLastName] = useState(userData.user.lastName);
-    const [email, setEmail] = useState(userData.user.email);
+    const [email] = useState(userData.user.email);
     const [education, setEducation] = useState(userData.user.education);
     const [skills, setSkills] = useState(userData.user.skills);
     const [image, setImage] = useState(userData.user.image);
@@ -113,10 +113,6 @@ const ApplicantEditProfile = (props) => {
                         <label htmlFor="lastName">Last Name</label>
                         <input type="text" className="form-control" id="lastName" required value={lastName} onChange={({ target }) => setLastName(target.value)} />
                     </div>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="email">Email</label>
-                    <input type="email" className="form-control" id="email" required value={email} onChange={({ target }) => setEmail(target.value)} />
                 </div>
                 <div className="form-group">
                     <div className="row justify-content-between px-3">

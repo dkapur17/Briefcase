@@ -58,7 +58,7 @@ const MyRecruits = () => {
 
     return (
         loading ? <FullPageSpinner /> :
-            <div className="container mt-3 mb-5">
+            <div className="container-fluid mt-3 mb-5 px-5">
                 <h1 className="text-center">My Recruits</h1>
                 <table className="table table-striped mt-4">
                     <thead className="thead-dark">

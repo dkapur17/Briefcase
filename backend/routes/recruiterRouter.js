@@ -95,10 +95,16 @@ router.delete('/deleteJob', auth, async (req, res) => {
     try {
         const { jobId } = req.body;
         const response = await Job.findByIdAndDelete(jobId);
+        const applications = await Application.find({ jobId, status: "accepted" }).exec();
+        const recruitIds = applications.map(app => app.applicantId);
+        const recruiter = await Recruiter.findById(req.user);
+        const filteredRecruits = recruiter.recruits.filter(rec => !recruitIds.includes(rec.applicantId));
+        await Recruiter.findByIdAndUpdate(req.user, { $set: { recruits: filteredRecruits } });
         await Application.updateMany({ jobId }, { $set: { status: "deleted" } });
         return res.json(response);
     }
     catch (err) {
+        console.log(err.message);
         return res.status(500).json({ error: err.message });
     }
 });
@@ -156,10 +162,15 @@ router.post('/acceptApplication', auth, async (req, res) => {
         const job = await Job.findById(jobId);
         const updatedPositionsCount = job.positionsFilled + 1;
         await Job.findByIdAndUpdate(jobId, { $set: { positionsFilled: updatedPositionsCount } });
+        if (job.positionsFilled === job.maxPositions - 1)
+            await Application.updateMany({ jobId, status: { $ne: "accepted" } }, { $set: { status: "rejected" } });
 
         const recruiter = await Recruiter.findById(recruiterId);
-        const updatedRecruitList = [...recruiter.recruits, { applicantId, rated: false }];
-        await Recruiter.findByIdAndUpdate(recruiterId, { $set: { recruits: updatedRecruitList } });
+        const exists = recruiter.recruits.find(rec => rec.applicantId === applicantId);
+        if (!exists) {
+            const updatedRecruitList = [...recruiter.recruits, { applicantId, rated: false }];
+            await Recruiter.findByIdAndUpdate(recruiterId, { $set: { recruits: updatedRecruitList } });
+        }
 
         return res.send("OK");
     }
@@ -188,6 +199,7 @@ router.get('/getRecruitList', auth, async (req, res) => {
         return res.json(modifiedRecruitList);
     }
     catch (err) {
+        console.log(err.message);
         return res.status(500).json({ error: err.message });
     }
 });

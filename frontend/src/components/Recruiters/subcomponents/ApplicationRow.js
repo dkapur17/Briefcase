@@ -12,25 +12,33 @@ const ApplicationRow = (props) => {
     const { i, applicationList } = props;
     const [app, setApp] = useState(applicationList[i]);
     const { userData, setUserData } = useContext(UserContext);
+    const [shortlistLoading, setShortlistLoading] = useState(false);
+    const [acceptLoading, setAcceptLoading] = useState(false);
 
     const modifyStatus = async (newStatus) => {
         try {
+            setShortlistLoading(true);
             await axios.post('/api/recruiter/setApplicationStatus', { appId: app._id, status: newStatus }, { headers: { 'auth-token': userData.token } });
             setApp({ ...app, status: newStatus });
+            setShortlistLoading(false);
         }
         catch (err) {
             console.log(err);
+            setShortlistLoading(false);
         }
     };
 
     const handleAccept = async () => {
         try {
+            setAcceptLoading(true);
             await axios.post('/api/recruiter/acceptApplication', { applicationId: app._id, applicantId: app.applicantId, jobId: app.jobId, recruiterId: app.recruiterId }, { headers: { 'auth-token': userData.token } });
             setApp({ ...app, status: 'accepted' });
             setUserData({ ...userData, user: { ...userData.user, recruits: [...userData.user.recruits, { applicantId: app.applicantId, rated: false }] } });
+            setAcceptLoading(false);
         }
         catch (err) {
             console.log(err);
+            setAcceptLoading(false);
         }
     }
 
@@ -38,7 +46,7 @@ const ApplicationRow = (props) => {
         <tr>
             <th className='text-center' scope="row">{i + 1}</th>
             <td className='text-center'>{app.applicantName}</td>
-            <td className='text-center'>{app.applicantSkills.join(', ')}</td>
+            <td className='text-center'>{app.applicantSkills.length ? app.applicantSkills.join(', ') : "-"}</td>
             <td className='text-center'>{moment(app.applicationDate).format('DD-MM-YYYY')}</td>
             <td className="text-center">
                 <div className="d-flex flex-column align-items-center">
@@ -68,15 +76,27 @@ const ApplicationRow = (props) => {
                 app.status === "applied" ?
                     <td className="text-center">
                         <div className='d-flex flex-column align-items-center my-1'>
-                            <button className="btn btn-outline-warning mb-1" onClick={() => modifyStatus("shortlisted")}>Shortlist</button>
-                            <button className="btn btn-outline-danger mt-1" onClick={() => modifyStatus("rejected")}>Reject</button>
+                            {shortlistLoading ?
+                                <div className="spinner-border spinner-border-sm text-warning" role="status">
+                                    <span className="sr-only">Loading...</span>
+                                </div>
+                                : <>
+                                    <button className="btn btn-outline-warning mb-1" onClick={() => modifyStatus("shortlisted")}>Shortlist</button>
+                                    <button className="btn btn-outline-danger mt-1" onClick={() => modifyStatus("rejected")}>Reject</button>
+                                </>}
                         </div>
                     </td> :
                     app.status === "shortlisted" ?
                         <td className="text-center">
                             <div className='d-flex flex-column align-items-center my-1'>
-                                <button className="btn btn-outline-success mb-1" onClick={handleAccept}>Accept</button>
-                                <button className="btn btn-outline-danger mt-1" onClick={() => modifyStatus("rejected")}>Reject</button>
+                                {acceptLoading ?
+                                    <div className="spinner-border spinner-border-sm text-success" role="status">
+                                        <span className="sr-only">Loading...</span>
+                                    </div>
+                                    : <>
+                                        <button className="btn btn-outline-success mb-1" onClick={handleAccept}>Accept</button>
+                                        <button className="btn btn-outline-danger mt-1" onClick={() => modifyStatus("rejected")}>Reject</button>
+                                    </>}
                             </div>
                         </td>
                         : <td />

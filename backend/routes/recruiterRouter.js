@@ -1,12 +1,22 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const moment = require('moment');
+const nodemailer = require('nodemailer');
 
 const auth = require('../middleware/auth');
 const Applicant = require('../models/applicantModel');
 const Recruiter = require('../models/recruiterModel');
 const Job = require('../models/jobModel');
 const Application = require('../models/applicationModel');
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    host: 'smtp.gmail.com',
+    auth: {
+        user: 'briefcasenotifs@gmail.com',
+        pass: 'br13fc4s3n0t1fs'
+    },
+});
 
 router.post('/register', async (req, res) => {
     try {
@@ -172,9 +182,20 @@ router.post('/acceptApplication', auth, async (req, res) => {
             await Recruiter.findByIdAndUpdate(recruiterId, { $set: { recruits: updatedRecruitList } });
         }
 
+        const applicant = await Applicant.findById(applicantId);
+        const mailOptions = {
+            from: 'briefcasenotifs@gmail.com',
+            to: applicant.email,
+            subject: 'Your Application was Accepted!',
+            html: `Congratulations ${applicant.firstName}!<br/>Your job appliation for the job posting <strong>${job.title}</strong> has been accepted!`
+        };
+
+        await transporter.sendMail(mailOptions);
+
         return res.send("OK");
     }
     catch (err) {
+        console.log(err);
         return res.status(500).json({ error: err.message });
     }
 });
@@ -212,7 +233,7 @@ router.post('/rateRecruit', auth, async (req, res) => {
         await Recruiter.findByIdAndUpdate(req.user, { $set: { recruits: updatedRecruitList } });
         const applicant = await Applicant.findById(applicantId);
         await Applicant.findByIdAndUpdate(applicantId, { $set: { ratings: [...applicant.ratings, Number(ratingValue)] } });
-        return res.send("OK");
+        return res.json({ updatedRating: [...applicant.ratings, Number(ratingValue)].reduce((p, a) => p + a, 0) / (applicant.ratings.length + 1) });
     }
     catch (err) {
         console.log(err.message);

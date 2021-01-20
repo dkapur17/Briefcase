@@ -16,9 +16,10 @@ const RecruitRow = (props) => {
     const handleRating = async () => {
         try {
             let updatedRecruitList = recruitList;
+            const res = await axios.post('/api/recruiter/rateRecruit', { applicantId: recruitList[i].applicantId, ratingValue }, { headers: { 'auth-token': userData.token } });
             updatedRecruitList[i].rated = true;
+            updatedRecruitList[i].recruitRating = res.data.updatedRating;
             setRecruitList(updatedRecruitList);
-            await axios.post('/api/recruiter/rateRecruit', { applicantId: recruitList[i].applicantId, ratingValue }, { headers: { 'auth-token': userData.token } });
             setIsRating(false);
         }
         catch (err) {

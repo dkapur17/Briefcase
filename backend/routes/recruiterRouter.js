@@ -13,9 +13,9 @@ const transporter = nodemailer.createTransport({
     service: 'gmail',
     host: 'smtp.gmail.com',
     auth: {
-        user: 'briefcasenotifs@gmail.com',
-        pass: 'br13fc4s3n0t1fs'
-    },
+        user: process.env.EMAIL_ID,
+        pass: process.env.EMAIL_PASSWORD
+    }
 });
 
 router.post('/register', async (req, res) => {

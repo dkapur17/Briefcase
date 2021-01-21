@@ -68,7 +68,11 @@ const ActiveJobs = () => {
             <div className="d-flex flex-column align-items-center">
                 <h1 className="text-center">Active Job Listings</h1>
                 <div className="row justify-content-center mt-3 w-100">
-                    {activeJobs.map(job => <EditableJobListing job={job} handleDelete={handleDelete} token={userData.token} key={job._id} />)}
+                    {
+                        activeJobs.length ?
+                            activeJobs.map(job => <EditableJobListing job={job} handleDelete={handleDelete} token={userData.token} key={job._id} />) :
+                            <p className="lead">Looks like you don't have any active jobs at the moment.</p>
+                    }
                 </div>
             </div>
         </div>
